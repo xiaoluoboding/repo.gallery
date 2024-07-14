@@ -134,11 +134,11 @@ export default function ReposPage({
               className="spotlight opacity-0 group-hover/spotlight:opacity-100 will-change-transform bg-white/20 absolute top-0 left-0 right-auto w-40 h-40 inset-0 transform-gpu blur-3xl"
             />
             <div className="content-wrapper">
-              <div className="content @container">
+              <div className="content @container 2xl:max-w-screen-xl">
                 <PageTitle title={currentCollection?.title || ""} />
                 <Suspense fallback={<LoadingSpinner />}>
                   {/* <!-- Masnory Layout for Bookmark Card --> */}
-                  <div className="columns-1 lg:columns-2 2xl:columns-2 lg:gap-6 [&>div:not(:first-child)]:mt-6">
+                  <div className="columns-1 lg:columns-2 2xl:columns-3 lg:gap-6 [&>div:not(:first-child)]:mt-6">
                     {currentRepoList.map((repo, index) => {
                       return (
                         <div
