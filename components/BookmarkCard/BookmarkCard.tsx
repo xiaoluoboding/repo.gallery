@@ -70,16 +70,16 @@ export const BookmarkCard = ({
         >
           {bookmark.description || bookmark.publisher}
         </span>
-        <span className="line-clamp-1 truncate inline-flex items-center gap-1 text-xs text-neutral-500">
+        <div className="flex items-center gap-1 text-xs text-neutral-500">
           <img
-            src={bookmark.logo || "/assets/fallback.webp"}
+            src={bookmark.owner_avatar || "/assets/fallback.webp"}
             className="inline-block align-text-bottom mr-1 h-4 w-4"
             alt={bookmark.author || ""}
             width={16}
             height={16}
           />
-          {bookmark.link}
-        </span>
+          <span className="grow truncate">{bookmark.slug}</span>
+        </div>
       </div>
     </div>
   )

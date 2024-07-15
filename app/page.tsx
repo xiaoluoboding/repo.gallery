@@ -1,66 +1,45 @@
 "use client"
 
-import { Suspense, useEffect, useMemo, useState } from "react"
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react"
 
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 import { LoadingSpinner } from "@/components/LoadingSpinner"
 import { XScrollArea } from "@/components/ui/XScrollArea"
 import { PageTitle } from "@/components/PageTitle"
 import { FloatingHeader } from "@/components/FloadingHeader"
-import { BookmarkCard } from "@/components/BookmarkCard/BookmarkCard"
 import { useRepoStore } from "@/store/repo"
 import { PROFILES } from "@/lib/useConstants"
-import { cn } from "@/lib/utils"
+import { cn, isProd } from "@/lib/utils"
+import { Logo } from "@/components/Logo"
+import { XButton } from "@/components/ui/XButton"
+import { PlusIcon, Star } from "lucide-react"
+import { DarkmodeToggle } from "@/components/DarkmodeToggle"
+import { Repo } from "@/lib/types"
+import FlipTilt from "react-flip-tilt"
+import { BookmarkCard } from "@/components/BookmarkCard/BookmarkCard"
 
 export default function Home() {
+  const router = useRouter()
   const [isClient, setIsClient] = useState(false)
+  const repoStore = useRepoStore()
   const repoList = useRepoStore((state) => state.repoList)
-  const productList = [
-    {
-      title: "Side Space",
-      description: "AI-Powered browser tab group manager",
-      image: "/assets/side-space.svg",
-      url: "https://sidespace.app?ref=robertshaw.id",
-    },
-    {
-      title: "One Tab Group",
-      description: "Your all-in-one browser tab manager",
-      image: "/assets/one-tab-group.svg",
-      url: "https://onetab.group?ref=robertshaw.id",
-    },
-    {
-      title: "Bookmark Style",
-      description: "Turn any link into a stylish visual web bookmark",
-      image: "/assets/bookmark-style.svg",
-      url: "https://bookmark.style?ref=robertshaw.id",
-    },
-  ]
+  const [currentRepoList, setCurrentRepoList] = useState<Repo[]>([])
 
-  const ossList = useMemo(() => {
-    const ossLinkList = [
-      "https://github.com/xiaoluoboding/vue-color-wheel",
-      "https://github.com/xiaoluoboding/vue-sonner",
-      "https://github.com/xiaoluoboding/vue-command-palette",
-      "https://github.com/nuxtbase/auth-ui-vue",
-      "https://img2txt2audio.vercel.app/",
-      "https://coolshapes-vue.vercel.app/",
-    ]
-    return repoList
-      .filter((repo) => ossLinkList.includes(repo.link))
-      .map((item) => {
-        const { origin } = new URL(item.link)
-        return {
-          ...item,
-          domain: origin,
-        }
-      })
-      .sort((a, b) => b.created_at!!.localeCompare(a.created_at!!))
-  }, [repoList])
+  const handleInitialData = useCallback(async () => {
+    const list = repoStore.isSearching ? repoList : repoList
+    list && setCurrentRepoList(list)
+  }, [repoStore.repoList, repoStore.isSearching])
+
+  const handleOpenRepo = (repo: Repo) => {
+    router.push(`/repos/${encodeURIComponent(repo.slug)}`)
+  }
 
   useEffect(() => {
     setIsClient(true)
+    handleInitialData()
   }, [])
 
   return (
@@ -68,83 +47,142 @@ export default function Home() {
       {isClient && (
         <XScrollArea className="relative flex flex-col w-full scrollable-area">
           <FloatingHeader scrollTitle="Repo Gallery" />
-          <div className="content-wrapper">
-            <div className="content text-primary max-w-screen-lg">
-              <PageTitle title="Home" className="lg:hidden" />
-              <h1>Hey there, 👋 I&apos;m Robert Shaw</h1>
-              <br />
-              <section className="flex flex-col">
-                <p className="my-0">
-                  A web dev enthusiast with a passion for Vue.js.
-                </p>
-                <p className="my-0">
-                  🖖 Vue.js fan / 🍎 SwiftUI Learner / ☕️ Coffee lover / 🌵
-                  Agave guardian
-                </p>
-                <p className="my-0">
-                  Passionate about bringing ideas to life. Explore all of my
-                  projects.
-                </p>
-              </section>
-              <Suspense fallback={<LoadingSpinner />}>
-                <main className="mt-24 space-y-16">
-                  <section>
-                    <h2>Currently working on</h2>
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-8">
-                      {productList.map((product) => (
-                        <a
-                          key={product.title}
-                          href={product.url}
-                          target="_blank"
-                          className="flex flex-col items-start justify-between bg-neutral-100 dark:bg-neutral-800 rounded-2xl p-4 aspect-square transform-cpu transition-all hover:scale-105"
-                        >
-                          <Image
-                            src={product.image}
-                            alt={product.title}
-                            width={80}
-                            height={80}
-                            className="bg-transparent border-none"
-                          />
-                          <div>
-                            <h1 className="text-2xl font-semibold bg-gradient-to-b from-neutral-900 to-neutral-500 dark:from-white dark:to-neutral-300 text-transparent bg-clip-text">
-                              {product.title}
-                            </h1>
-                            <div className="text-lg text-accent-foreground">
-                              {product.description}
-                            </div>
-                          </div>
-                        </a>
-                      ))}
+
+          <header className="flex h-16 items-center mx-auto bg-background/60 backdrop-blur fixed w-full top-0 z-50 border-b dark:border-neutral-800">
+            <div className="container max-w-screen-xl flex justify-between px-4 sm:px-8">
+              <div className="mr-4">
+                <a
+                  className="flex items-center justify-center space-x-3 text-lg font-semibold py-6 text-center text-neutral-600 dark:text-neutral-100 selection:bg-emerald-500 mr-10"
+                  href="/"
+                >
+                  <div className="relative h-8 w-8 md:h-6 md:w-6 bg-background text-white flex items-center justify-center rounded-md text-sm antialiased">
+                    <div className="text-sm text-emerald-500 relative z-20">
+                      <Logo className="w-6 h-6" />
                     </div>
-                  </section>
-                
-                  <section>
-                    <h2>Find me on</h2>
-                    <p className="flex flex-wrap gap-2 mt-4">
-                      {Object.values(PROFILES).map((link, linkIndex) => {
-                        return (
-                          <Link
-                            key={link.url}
-                            href={link.url}
-                            className={cn(
-                              "group flex items-center justify-between rounded-lg p-2 text-accent-foreground hover:underline"
-                            )}
-                          >
-                            <span className="flex items-center gap-2">
-                              {link.icon}
-                              <span className={cn("font-medium")}>
-                                {link.title}
-                              </span>
-                            </span>
-                          </Link>
-                        )
-                      })}
-                    </p>
-                  </section>
-                </main>
-              </Suspense>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <h1 className="text-primary text-xl">Repo Gallery</h1>
+                  </div>
+                </a>
+              </div>
+              <div className="flex items-center gap-4">
+                <nav className="items-center space-x-2 text-sm font-medium hidden xl:flex">
+                  <XButton variant="link">
+                    <Link
+                      href={"https://github.com/dashboard-feed"}
+                      target="_blank"
+                    >
+                      Dashboard Feed
+                    </Link>
+                  </XButton>
+                  <XButton variant="link" onClick={() => {}}>
+                    Repos
+                  </XButton>
+                  <XButton variant="link" onClick={() => {}}>
+                    Topics
+                  </XButton>
+                </nav>
+                <div className="flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end">
+                  <DarkmodeToggle />
+                  <XButton size="sm" variant="outline">
+                    <Star className="h-4 w-4 mr-1" />
+                    Star
+                  </XButton>
+                  <XButton size="sm" variant="default">
+                    <PlusIcon className="h-4 w-4 mr-1" />
+                    Submit
+                  </XButton>
+                </div>
+              </div>
             </div>
-          </div>
+          </header>
+          <section className="container py-24 sm:pt-64 text-primary max-w-screen-md">
+            <div className="flex justify-center flex-col text-center">
+              <h1 className="text-3xl lg:text-5xl text-neon-neutral">
+                Discover the Original Information of Open Source Repositories
+              </h1>
+              <br />
+              <p className="my-0">
+                A curated selection of handpicked repositories, showcasing their
+                original OG images.
+              </p>
+            </div>
+          </section>
+          <section className="container max-w-screen-lg mt-12 sm:mt-24 flex items-center justify-between">
+            <Suspense fallback={<LoadingSpinner />}>
+              {/* <!-- Masnory Layout for Bookmark Card --> */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-4">
+                {currentRepoList.map((repo, index) => {
+                  return (
+                    <div
+                      key={repo.link + repo.id}
+                      className="relative cursor-pointer h-full"
+                      onClick={() => handleOpenRepo(repo)}
+                    >
+                      {/* <BookmarkCard tidy bookmark={repo} order={index} /> */}
+                      <FlipTilt
+                        front={
+                          <BookmarkCard tidy bookmark={repo} order={index} />
+                        }
+                        back={
+                          <BookmarkCard
+                            tidy
+                            flip
+                            bookmark={repo}
+                            order={index}
+                          />
+                        }
+                        borderColor="rgba(255, 255, 255, 0)"
+                        borderWidth="0px"
+                        className="border-none h-full flip-tilt-card"
+                        stiffness={48}
+                      />
+                    </div>
+                  )
+                })}
+              </div>
+            </Suspense>
+          </section>
+          <footer className="container w-full mt-24 sm:mt-32 flex items-center justify-between">
+            <div className="flex items-center justify-center lg:justify-start lg:flex-1 gap-x-1.5 lg:mt-0">
+              <a
+                className="flex items-center justify-center space-x-3 text-lg font-semibold text-center text-neutral-600 dark:text-neutral-100 selection:bg-emerald-500 mr-10"
+                href="/"
+              >
+                <div className="relative h-8 w-8 md:h-6 md:w-6 bg-background text-white flex items-center justify-center rounded-md text-sm antialiased">
+                  <div className="text-sm text-emerald-500 relative z-20">
+                    <Logo className="w-6 h-6" />
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-primary text-xl">Repo Gallery</h1>
+                </div>
+              </a>
+              <div className="mr-4 hidden md:flex items-center">
+                <div className="text-neutral-500 dark:text-neutral-400 text-sm">
+                  Copyright © {new Date().getFullYear()}. All rights reserved.
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              {Object.values(PROFILES).map((link, linkIndex) => {
+                return (
+                  <Link
+                    key={link.url}
+                    href={link.url}
+                    className={cn(
+                      "group flex items-center justify-between rounded-lg p-2 text-accent-foreground hover:underline"
+                    )}
+                  >
+                    <span className="flex items-center gap-2 w-5 h-5">
+                      {link.icon}
+                    </span>
+                  </Link>
+                )
+              })}
+            </div>
+          </footer>
         </XScrollArea>
       )}
     </>
