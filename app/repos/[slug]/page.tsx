@@ -10,7 +10,6 @@ import Image from "next/image"
 
 import { LoadingSpinner } from "@/components/LoadingSpinner"
 import { XScrollArea } from "@/components/ui/XScrollArea"
-import { FloatingHeader } from "@/components/FloadingHeader"
 import { Repo, Collection } from "@/lib/types"
 import { useRepoStore } from "@/store/repo"
 import {
@@ -30,6 +29,7 @@ import {
   XTabsTrigger,
 } from "@/components/ui/XTabs"
 import { useTheme } from "next-themes"
+import FlipCard from "@/components/BookmarkCard/FlipCard"
 
 // export async function generateStaticParams() {
 //   return collectionList.map((collection: Collection) => ({
@@ -103,18 +103,17 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
                 <Suspense fallback={<LoadingSpinner />}>
                   <div
                     className={cn(
-                      "relative aspect-[2/1] w-full rounded-t-2xl bg-gradient-to-tr"
+                      "relative aspect-[1200/630] w-full rounded-t-2xl bg-gradient-to-tr"
                     )}
                   >
-                    <Image
-                      className="bg-background border-border aspect-[2/1] object-cover"
-                      src={currentRepo.image || currentRepo.original_image!}
-                      alt={currentRepo.title}
-                      width={1200}
-                      height={600}
+                    <FlipCard
+                      front={currentRepo.image || "/assets/fallback.webp"}
+                      back={
+                        currentRepo.original_image || "/assets/fallback.webp"
+                      }
                     />
                   </div>
-                  <div className="relative -mt-8 flex items-center justify-between px-4 sm:-mt-12 sm:items-end md:pr-0">
+                  <div className="relative flex items-center justify-between px-4 sm:-mt-12 sm:items-end md:pr-0">
                     <Image
                       src={currentRepo.owner_avatar || currentRepo.image}
                       alt={currentRepo.title}

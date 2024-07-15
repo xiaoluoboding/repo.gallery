@@ -95,6 +95,9 @@ importers:
       react-dom:
         specifier: ^18
         version: 18.2.0(react@18.2.0)
+      react-flip-tilt:
+        specifier: ^0.2.0
+        version: 0.2.0(framer-motion@11.0.18(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react-hook-form:
         specifier: ^7.51.1
         version: 7.51.1(react@18.2.0)
@@ -2202,6 +2205,13 @@ packages:
     peerDependencies:
       react: ^18.2.0
 
+  react-flip-tilt@0.2.0:
+    resolution: {integrity: sha512-lqSVsKWBsdTljFSrSEllkE+MrKKIcBBgqHAS2XKO/7Wv3bmfjgwp5FUgDfWdvAEOjfpT95QPVRfaAWZRsGNCjQ==}
+    peerDependencies:
+      framer-motion: '>= 10.0 || ^10.15.2'
+      react: '>= 16.8 || ^18.2.0'
+      react-dom: '>= 16.8 || ^18.2.0'
+
   react-hook-form@7.51.1:
     resolution: {integrity: sha512-ifnBjl+kW0ksINHd+8C/Gp6a4eZOdWyvRv0UBaByShwU8JbVx5hTcTWEcd5VdybvmPTATkVVXk9npXArHmo56w==}
     engines: {node: '>=12.22.0'}
@@ -2210,6 +2220,18 @@ packages:
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
+
+  react-next-parallax@0.1.0:
+    resolution: {integrity: sha512-cRSDAW3LRUNpPjc2oYlAWZhIuHvgK/2UpmOpT1BV+sE7OgX7H7SPLjkzpje8AWOf8HCW8S3FFDpEyG/i8YhidA==}
+    peerDependencies:
+      react: '>= 16.8 || ^18.2.0'
+      react-dom: '>= 16.8 || ^18.2.0'
+
+  react-next-tilt@0.4.3:
+    resolution: {integrity: sha512-zvvYa0g1xRGEAE2q7HHbQ68NCShrbhsKkczQ2IsoQulgXxbEIN9GILzGv4KvqvvCN/cZlSv8k9phpsG27RmSoQ==}
+    peerDependencies:
+      react: '>= 16.8 || ^18.2.0'
+      react-dom: '>= 16.8 || ^18.2.0'
 
   react-remove-scroll-bar@2.3.6:
     resolution: {integrity: sha512-DtSYaao4mBmX+HDo5YWYdBWQwYIQQshUV/dVxFxK+KM26Wjwp1gZ6rv6OC3oujI6Bfu6Xyg3TwK533AQutsn/g==}
@@ -4864,11 +4886,30 @@ snapshots:
       react: 18.2.0
       scheduler: 0.23.0
 
+  react-flip-tilt@0.2.0(framer-motion@11.0.18(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+    dependencies:
+      framer-motion: 11.0.18(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-next-parallax: 0.1.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      react-next-tilt: 0.4.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+
   react-hook-form@7.51.1(react@18.2.0):
     dependencies:
       react: 18.2.0
 
   react-is@16.13.1: {}
+
+  react-next-parallax@0.1.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-next-tilt: 0.4.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+
+  react-next-tilt@0.4.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
 
   react-remove-scroll-bar@2.3.6(@types/react@18.2.67)(react@18.2.0):
     dependencies:

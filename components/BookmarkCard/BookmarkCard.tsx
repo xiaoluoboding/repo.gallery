@@ -1,18 +1,25 @@
 /* eslint-disable @next/next/no-img-element */
 import { Repo } from "@/lib/types"
-import { cn } from "@/lib/utils"
-import { Link2Icon } from "lucide-react"
-
+import { FlipTilt } from "react-flip-tilt"
 import Image from "next/image"
+
+import { Link2Icon } from "lucide-react"
+import { cn } from "@/lib/utils"
 import FlipCard from "./FlipCard"
 
 interface IProps {
   bookmark: Repo
   order: number
   tidy?: boolean
+  flip?: boolean
 }
 
-export const BookmarkCard = ({ bookmark, order, tidy = false }: IProps) => {
+export const BookmarkCard = ({
+  bookmark,
+  order,
+  tidy = false,
+  flip = false,
+}: IProps) => {
   return (
     <div
       key={bookmark.link}
@@ -21,10 +28,30 @@ export const BookmarkCard = ({ bookmark, order, tidy = false }: IProps) => {
       data-bookmark-order={order}
     >
       <span className="aspect-[1200/630] overflow-hidden rounded-lg">
-        <FlipCard
-          frontImage={bookmark.image || "/assets/fallback.webp"}
-          backImage={bookmark.original_image || "/assets/fallback.webp"}
+        <img
+          src={flip ? bookmark.original_image! : bookmark.image}
+          alt="image"
+          className="aspect-[1200/630] animate-reveal rounded-lg border dark:border-neutral-700/80 bg-cover bg-center bg-no-repeat object-cover shadow-black/40"
         />
+        {/* <FlipCard
+          front={bookmark.original_image || "/assets/fallback.webp"}
+          back={
+            bookmark.image.includes("repository-images.githubusercontent.com")
+              ? bookmark.image
+              : "/assets/fallback.webp"
+          }
+        /> */}
+        {/* <FlipTilt
+          front={bookmark.original_image || "/assets/fallback.webp"}
+          back={
+            bookmark.image.includes("repository-images.githubusercontent.com")
+              ? bookmark.image
+              : "/assets/fallback.webp"
+          }
+          borderColor="rgba(255, 255, 255, 0)"
+          borderWidth="0px"
+          className="border-none"
+        /> */}
       </span>
       <div className="flex flex-col justify-between gap-1.5">
         <h2
