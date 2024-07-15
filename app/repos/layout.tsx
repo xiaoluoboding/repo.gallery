@@ -139,7 +139,7 @@ export default function ReposLayout({
                   return (
                     <ListItem
                       key={collection.id}
-                      path={`/tags/${collection.slug}`}
+                      path={`/topics/${collection.slug}`}
                       title={collection.title}
                       description={`${collection.count} repos`}
                     />

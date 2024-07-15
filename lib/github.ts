@@ -19,7 +19,7 @@ export async function getRepo(url: string) {
       }),
     }).then((res) => res.json())) || {}
 
-  console.log(data)
+  // console.log(data)
 
   const {
     name: title,

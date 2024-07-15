@@ -3,8 +3,6 @@ import { Repo } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import { Link2Icon } from "lucide-react"
 
-// import { TweetCard } from "@/components/tweet-card/tweet-card"
-// import { TWEETS_COLLECTION_ID } from "@/lib/constants"
 import Image from "next/image"
 import FlipCard from "./FlipCard"
 
@@ -15,16 +13,10 @@ interface IProps {
 }
 
 export const BookmarkCard = ({ bookmark, order, tidy = false }: IProps) => {
-  // if (bookmark.link && bookmark.collectionId === TWEETS_COLLECTION_ID) {
-  //   const match = bookmark.link.match(/\/status\/(\d+)/) ?? []
-  //   const tweetId = match[1]
-  //   return <TweetCard id={tweetId} />
-  // }
-
   return (
     <div
       key={bookmark.link}
-      className="thumbnail-shadow flex aspect-auto min-w-0 cursor-pointer flex-col gap-4 overflow-hidden rounded-xl bg-white dark:bg-accent p-4 transition-colors duration-300 hover:bg-neutral-100/80"
+      className="thumbnail-shadow flex h-full aspect-auto min-w-0 cursor-pointer flex-col gap-4 overflow-hidden rounded-xl bg-white dark:bg-accent p-4 transition-colors duration-300 hover:bg-neutral-50/80"
       rel="noopener noreferrer"
       data-bookmark-order={order}
     >
@@ -34,7 +26,7 @@ export const BookmarkCard = ({ bookmark, order, tidy = false }: IProps) => {
           backImage={bookmark.original_image || "/assets/fallback.webp"}
         />
       </span>
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col justify-between gap-1.5">
         <h2
           className={cn(
             "text-lg leading-snug font-semibold text-accent-foreground",
@@ -45,7 +37,7 @@ export const BookmarkCard = ({ bookmark, order, tidy = false }: IProps) => {
         </h2>
         <span
           className={cn(
-            "text-sm text-accent-foreground",
+            "flex-1 text-sm text-accent-foreground",
             tidy ? "line-clamp-2" : "line-clamp-3"
           )}
         >

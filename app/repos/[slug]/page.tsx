@@ -1,11 +1,12 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react"
 import { toast } from "sonner"
 import { motion, useMotionTemplate, useMotionValue } from "framer-motion"
-import { Star, Globe } from "lucide-react"
-import Image from 'next/image'
+import { Star, Globe, HashIcon } from "lucide-react"
+import Image from "next/image"
 
 import { LoadingSpinner } from "@/components/LoadingSpinner"
 import { XScrollArea } from "@/components/ui/XScrollArea"
@@ -22,6 +23,13 @@ import {
 import { UpdateBookmarkForm } from "../modules/UpdateBookmarkForm"
 import { cn } from "@/lib/utils"
 import { buttonLinkVariants } from "@/components/ui/XButtonLink"
+import {
+  XTabs,
+  XTabsContent,
+  XTabsList,
+  XTabsTrigger,
+} from "@/components/ui/XTabs"
+import { useTheme } from "next-themes"
 
 // export async function generateStaticParams() {
 //   return collectionList.map((collection: Collection) => ({
@@ -29,12 +37,9 @@ import { buttonLinkVariants } from "@/components/ui/XButtonLink"
 //   }))
 // }
 
-export default function RepoPage({
-  params,
-}: {
-  params: { slug: string }
-}) {
+export default function RepoPage({ params }: { params: { slug: string } }) {
   const { slug } = params
+  const { theme } = useTheme()
 
   let mouseX = useMotionValue(0)
   let mouseY = useMotionValue(0)
@@ -57,11 +62,8 @@ export default function RepoPage({
 
   const handleInitialData = useCallback(async () => {
     const repo = repoList.find((repo) => repo.slug === decodeURIComponent(slug))
-    setCurrentRepo(repo || {} as Repo)
-  }, [
-    slug,
-    repoStore.isSearching,
-  ])
+    setCurrentRepo(repo || ({} as Repo))
+  }, [slug, repoStore.isSearching])
 
   const handleOpenDrawer = (repo: Repo) => {
     setSelectedRepo(repo)
@@ -70,11 +72,7 @@ export default function RepoPage({
 
   useEffect(() => {
     handleInitialData()
-  }, [
-    slug,
-    repoStore.repoList,
-    repoStore.isSearching,
-  ])
+  }, [slug, repoStore.repoList, repoStore.isSearching])
   useEffect(() => {
     setIsClient(true)
     handleInitialData()
@@ -101,7 +99,7 @@ export default function RepoPage({
               className="spotlight opacity-0 group-hover/spotlight:opacity-100 will-change-transform bg-white/20 absolute top-0 left-0 right-auto w-40 h-40 inset-0 transform-gpu blur-3xl"
             />
             <div className="content-wrapper">
-              <div className="content @container max-w-screen-md">
+              <div className="content @container max-w-screen-md bg-background p-8 border border-border rounded-lg">
                 <Suspense fallback={<LoadingSpinner />}>
                   <div
                     className={cn(
@@ -109,6 +107,7 @@ export default function RepoPage({
                     )}
                   >
                     <Image
+                      className="bg-background border-border aspect-[2/1] object-cover"
                       src={currentRepo.image || currentRepo.original_image!}
                       alt={currentRepo.title}
                       width={1200}
@@ -121,12 +120,9 @@ export default function RepoPage({
                       alt={currentRepo.title}
                       width={100}
                       height={100}
-                      className="h-16 w-16 rounded-full bg-white p-2 sm:h-24 sm:w-24"
+                      className="h-16 w-16 rounded-full bg-background border-border p-2 sm:h-24 sm:w-24"
                     />
                     <div className="flex items-center space-x-2 py-2">
-                      {/* <Suspense>
-                        <EditProjectButton project={project} />
-                      </Suspense> */}
                       <a
                         href={currentRepo.link}
                         target="_blank"
@@ -152,26 +148,66 @@ export default function RepoPage({
                       <h1 className="font-display text-3xl font-bold">
                         {currentRepo.title}
                       </h1>
-                      {/* {currentRepo.verified && (
-                        <BadgeCheck
-                          className="h-8 w-8 text-white"
-                          fill="#1c9bef"
-                        />
-                      )} */}
                     </div>
                     <p className="mt-2 text-gray-500">
                       {currentRepo.description}
                     </p>
                   </div>
 
-                  {/* <Image
-                    src={
-                      "https://api.star-history.com/svg?repos=vercel/next.js"
-                    }
-                    alt={currentRepo.title}
-                    width={864}
-                    height={576}
-                  /> */}
+                  <XTabs defaultValue="star-history" className="w-full">
+                    <XTabsList>
+                      <XTabsTrigger value="Overview">Overview</XTabsTrigger>
+                      <XTabsTrigger value="star-history">
+                        Star History
+                      </XTabsTrigger>
+                      <XTabsTrigger value="contributors">
+                        Contributors
+                      </XTabsTrigger>
+                    </XTabsList>
+                    <XTabsContent value="star-history">
+                      <a href={currentRepo.link} target="_blank">
+                        <img
+                          src={`https://api.star-history.com/svg?repos=${
+                            currentRepo.slug
+                          }&theme=${theme === "dark" ? "dark" : "light"}`}
+                          className="bg-background p-4 border-border"
+                          alt={currentRepo.title}
+                          width={864}
+                          height={576}
+                        />
+                      </a>
+                    </XTabsContent>
+                    <XTabsContent value="contributors">
+                      <a href={currentRepo.link} target="_blank">
+                        <img
+                          src={`https://contrib.rocks/image?repo=${currentRepo.slug}`}
+                          className="bg-background p-4 border-border"
+                          alt={currentRepo.title}
+                          width={864}
+                          height={576}
+                        />
+                      </a>
+                    </XTabsContent>
+                  </XTabs>
+
+                  <div className="flex gap-x-4 gap-y-3 flex-col items-start w-full mt-4">
+                    <h3 className="text-foreground font-semibold tracking-tight text-pretty text-xl">
+                      Related topics:
+                    </h3>
+                    <div className="flex gap-x-3 gap-y-2 flex-row flex-wrap items-center">
+                      {currentRepo.topics?.map((topic) => (
+                        <a
+                          className="flex items-center gap-0.5 text-primary text-sm hover:text-foreground"
+                          data-discover="true"
+                          key={topic}
+                          href={`/topics/${topic}`}
+                        >
+                          <HashIcon className="h-3 w-3" />
+                          {topic}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
                 </Suspense>
               </div>
             </div>

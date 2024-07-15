@@ -138,7 +138,7 @@ export default function ReposPage({
                 <PageTitle title={currentCollection?.title || ""} />
                 <Suspense fallback={<LoadingSpinner />}>
                   {/* <!-- Masnory Layout for Bookmark Card --> */}
-                  <div className="columns-1 lg:columns-2 2xl:columns-3 lg:gap-6 [&>div:not(:first-child)]:mt-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
                     {currentRepoList.map((repo, index) => {
                       return (
                         <div
@@ -146,7 +146,7 @@ export default function ReposPage({
                           className="relative cursor-pointer"
                           onClick={() => handleOpenRepo(repo)}
                         >
-                          <BookmarkCard bookmark={repo} order={index} />
+                          <BookmarkCard tidy bookmark={repo} order={index} />
                           {!isProd && (
                             <div className="absolute top-6 right-6 flex items-center gap-2">
                               <XButton
