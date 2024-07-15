@@ -143,8 +143,8 @@ export default function Home() {
               </div>
             </Suspense>
           </section>
-          <footer className="container w-full mt-24 sm:mt-32 flex items-center justify-between">
-            <div className="flex items-center justify-center lg:justify-start lg:flex-1 gap-x-1.5 lg:mt-0">
+          <footer className="container max-w-screen-xl w-full h-16 mt-24 sm:mt-32 flex items-center justify-between  px-4 sm:px-8">
+            <div className="flex items-center justify-center lg:justify-start lg:flex-1 gap-x-1.5 lg:mt-0 ">
               <a
                 className="flex items-center justify-center space-x-3 text-lg font-semibold text-center text-neutral-600 dark:text-neutral-100 selection:bg-emerald-500 mr-10"
                 href="/"
