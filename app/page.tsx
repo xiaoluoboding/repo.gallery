@@ -19,6 +19,7 @@ import { DarkmodeToggle } from "@/components/DarkmodeToggle"
 import { Repo } from "@/lib/types"
 import FlipTilt from "react-flip-tilt"
 import { BookmarkCard } from "@/components/BookmarkCard/BookmarkCard"
+import GridPattern from "@/components/GridPattern"
 
 async function fetchData() {
   const res = await fetch("/api/sdb/repos", {
@@ -62,6 +63,19 @@ export default function Home() {
     <>
       {isClient && (
         <XScrollArea className="relative flex flex-col w-full scrollable-area">
+          <div className="absolute inset-0">
+            <div className="relative w-full mx-auto h-[80vh]">
+              <GridPattern
+                width={60}
+                height={60}
+                x={-1}
+                y={-1}
+                className={cn(
+                  "[mask-image:linear-gradient(to_bottom,white,transparent,transparent)] "
+                )}
+              />
+            </div>
+          </div>
           <FloatingHeader scrollTitle="Repo Gallery" />
 
           <header className="flex h-16 items-center mx-auto bg-background/60 backdrop-blur fixed w-full top-0 z-50 border-b dark:border-neutral-800">
@@ -112,6 +126,7 @@ export default function Home() {
               </div>
             </div>
           </header>
+
           <section className="container py-24 sm:pt-64 text-primary max-w-screen-md">
             <div className="flex justify-center flex-col text-center">
               <h1 className="text-3xl lg:text-5xl text-neon-neutral">
