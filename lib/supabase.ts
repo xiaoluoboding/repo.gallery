@@ -8,10 +8,7 @@ export const supabaseAdmin = createClient(
 )
 
 export const createRepo = async (repo: Repo) => {
-  const { error } = await supabaseAdmin
-    .from("repos")
-    .insert([repo])
-    .select()
+  const { error } = await supabaseAdmin.from("repos").insert([repo]).select()
   if (error) {
     console.log(error.message)
   }
@@ -21,7 +18,7 @@ export const fetchRepoList = async (): Promise<Repo[]> => {
   const { data: bookmarkList, error } = await supabaseAdmin
     .from("repos")
     .select("*")
-    .order("created_at", { ascending: false })
+    .order("stars", { ascending: false })
 
   if (error) {
     console.log(error.message)
@@ -31,10 +28,7 @@ export const fetchRepoList = async (): Promise<Repo[]> => {
 }
 
 export const updateRepoById = async (id: string, repo: Repo) => {
-  const { error } = await supabaseAdmin
-    .from("repos")
-    .update(repo)
-    .eq("id", id)
+  const { error } = await supabaseAdmin.from("repos").update(repo).eq("id", id)
   if (error) {
     console.log(error.message)
   }

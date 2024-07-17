@@ -18,6 +18,7 @@ export interface Repo {
   publisher: string | null
   tags: RepoTag[]
   language: string
+  language_color: string
   stars: number
   forks: number
   contributors?: number

@@ -89,14 +89,45 @@ export function InsertBookmarkForm({
     }
   }
 
+  const getRepoLanguageColor = async (lang: string): Promise<string> => {
+    let data: {
+      status: number
+      language: string
+      color: string
+    } = {
+      status: 200,
+      language: "",
+      color: "",
+    }
+    try {
+      const res = await fetch(`/api/linguist/${encodeURIComponent(lang)}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      data = (await res.json()) as {
+        status: number
+        language: string
+        color: string
+      }
+      return data.color
+    } catch (error) {
+      console.log(error)
+      return ""
+    }
+  }
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
-    const metadata = await handleFetchBookmarkMetadata(values.link) 
-    const repodata = await getRepo(values.link); 
+    const metadata = await handleFetchBookmarkMetadata(values.link)
+    const repodata = await getRepo(values.link)
+    const languageColor = await getRepoLanguageColor(repodata.language)
     const repoRecord = {
       ...metadata,
       ...repodata,
       original_image: metadata.originalOGImage,
+      language_color: languageColor,
     }
     try {
       await handleInsertRepo(repoRecord)
@@ -125,6 +156,7 @@ export function InsertBookmarkForm({
         "author",
         "publisher",
         "language",
+        "language_color",
         "stars",
         "forks",
         "contributors",

@@ -8,7 +8,6 @@ import { SquarePenIcon, XIcon } from "lucide-react"
 
 import { LoadingSpinner } from "@/components/LoadingSpinner"
 import { XScrollArea } from "@/components/ui/XScrollArea"
-import { PageTitle } from "@/components/PageTitle"
 import { FloatingHeader } from "@/components/FloadingHeader"
 import { BookmarkCard } from "@/components/BookmarkCard/BookmarkCard"
 import { Repo, Collection } from "@/lib/types"
@@ -128,7 +127,7 @@ export default function ReposPage({ params }: { params: { slug: string } }) {
               }}
               className="spotlight opacity-0 group-hover/spotlight:opacity-100 will-change-transform bg-white/20 absolute top-0 left-0 right-auto w-64 h-64 inset-0 transform-gpu blur-3xl"
             />
-            <div className="content 2xl:max-w-screen-xl p-8 2xl:p-12 overflow-y-auto">
+            <div className="content 2xl:max-w-screen-xl p-8 2xl:p-24 overflow-y-auto">
               <Suspense fallback={<LoadingSpinner />}>
                 {/* <!-- Masnory Layout for Bookmark Card --> */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
@@ -142,15 +141,15 @@ export default function ReposPage({ params }: { params: { slug: string } }) {
                         {/* <BookmarkCard tidy bookmark={repo} order={index} /> */}
                         <FlipTilt
                           front={
+                            <BookmarkCard tidy bookmark={repo} order={index} />
+                          }
+                          back={
                             <BookmarkCard
                               tidy
                               flip
                               bookmark={repo}
                               order={index}
                             />
-                          }
-                          back={
-                            <BookmarkCard tidy bookmark={repo} order={index} />
                           }
                           borderColor="rgba(255, 255, 255, 0)"
                           borderWidth="0px"

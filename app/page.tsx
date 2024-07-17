@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation"
 
 import { LoadingSpinner } from "@/components/LoadingSpinner"
 import { XScrollArea } from "@/components/ui/XScrollArea"
-import { PageTitle } from "@/components/PageTitle"
 import { FloatingHeader } from "@/components/FloadingHeader"
 import { useRepoStore } from "@/store/repo"
 import { PROFILES } from "@/lib/useConstants"
@@ -76,10 +75,10 @@ export default function Home() {
                     </Link>
                   </XButton>
                   <XButton variant="link" onClick={() => {}}>
-                    Repos
+                    <Link href="/repos">Repos</Link>
                   </XButton>
                   <XButton variant="link" onClick={() => {}}>
-                    Topics
+                    <Link href="/topics">Topics</Link>
                   </XButton>
                 </nav>
                 <div className="flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end">
