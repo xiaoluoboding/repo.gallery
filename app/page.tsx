@@ -11,7 +11,7 @@ import { XScrollArea } from "@/components/ui/XScrollArea"
 import { FloatingHeader } from "@/components/FloadingHeader"
 import { useRepoStore } from "@/store/repo"
 import { PROFILES } from "@/lib/useConstants"
-import { cn, isProd } from "@/lib/utils"
+import { cn, createCollectionList } from "@/lib/utils"
 import { Logo } from "@/components/Logo"
 import { XButton } from "@/components/ui/XButton"
 import { PlusIcon, Star } from "lucide-react"
@@ -20,17 +20,34 @@ import { Repo } from "@/lib/types"
 import FlipTilt from "react-flip-tilt"
 import { BookmarkCard } from "@/components/BookmarkCard/BookmarkCard"
 
+async function fetchData() {
+  const res = await fetch("/api/sdb/repos", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+  const repoList = (await res.json()) as Repo[]
+  const collectionList = createCollectionList(repoList)
+
+  return {
+    repoList,
+    collectionList,
+  }
+}
+
 export default function Home() {
   const router = useRouter()
   const [isClient, setIsClient] = useState(false)
   const repoStore = useRepoStore()
-  const repoList = useRepoStore((state) => state.repoList)
   const [currentRepoList, setCurrentRepoList] = useState<Repo[]>([])
 
   const handleInitialData = useCallback(async () => {
-    const list = repoStore.isSearching ? repoList : repoList
-    list && setCurrentRepoList(list)
-  }, [repoStore.repoList, repoStore.isSearching])
+    const res = await fetchData()
+    repoStore.setCollectionList(res.collectionList)
+    repoStore.setRepoList(res.repoList)
+    res.repoList && setCurrentRepoList(res.repoList)
+  }, [])
 
   const handleOpenRepo = (repo: Repo) => {
     router.push(`/repos/${encodeURIComponent(repo.slug)}`)

@@ -62,7 +62,7 @@ export const BookmarkCard = ({
         <span
           className={cn(
             "flex-1 text-sm text-accent-foreground",
-            tidy ? "line-clamp-2" : "line-clamp-3"
+            tidy ? "line-clamp-2 min-h-10" : "line-clamp-3"
           )}
         >
           {bookmark.description || bookmark.publisher}

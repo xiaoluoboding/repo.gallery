@@ -127,6 +127,7 @@ export function InsertBookmarkForm({
       ...metadata,
       ...repodata,
       original_image: metadata.originalOGImage,
+      language: repodata.language === null ? "Markdown" : repodata.language,
       language_color: languageColor,
     }
     try {
