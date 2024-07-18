@@ -70,7 +70,9 @@ export const BookmarkCard = ({
         <div className="flex items-center gap-4 text-xs text-muted-foreground">
           <div className="flex items-center gap-1">
             <Star className="h-4 w-4" />
-            <span className="text-sm">{bookmark.stars}</span>
+            <span className="text-sm">
+              {bookmark.stars.toLocaleString("en-US")}
+            </span>
           </div>
           <div className="flex items-center gap-1">
             <span
