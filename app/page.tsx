@@ -5,6 +5,8 @@ import { Suspense, useCallback, useEffect, useMemo, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import FlipTilt from "react-flip-tilt"
+import { PlusIcon, Star } from "lucide-react"
 
 import { LoadingSpinner } from "@/components/LoadingSpinner"
 import { XScrollArea } from "@/components/ui/XScrollArea"
@@ -14,12 +16,11 @@ import { PROFILES } from "@/lib/useConstants"
 import { cn, createCollectionList } from "@/lib/utils"
 import { Logo } from "@/components/Logo"
 import { XButton } from "@/components/ui/XButton"
-import { PlusIcon, Star } from "lucide-react"
 import { DarkmodeToggle } from "@/components/DarkmodeToggle"
 import { Repo } from "@/lib/types"
-import FlipTilt from "react-flip-tilt"
 import { BookmarkCard } from "@/components/BookmarkCard/BookmarkCard"
 import GridPattern from "@/components/GridPattern"
+import { XSkeleton, XSkeletonWithLoading } from "@/components/ui/XSkeleton"
 
 async function fetchData() {
   const res = await fetch("/api/sdb/repos", {
@@ -37,17 +38,83 @@ async function fetchData() {
   }
 }
 
+const RepoCardSkeleton = () => {
+  return (
+    <div
+      className="thumbnail-shadow flex h-full aspect-auto min-w-0 cursor-pointer flex-col gap-4 overflow-hidden rounded-xl bg-white dark:bg-accent p-4 transition-colors duration-300 hover:bg-neutral-50/80"
+      rel="noopener noreferrer"
+    >
+      <span className="aspect-[1200/630] overflow-hidden rounded-lg">
+        <XSkeleton className="aspect-[1200/630] animate-reveal rounded-lg border dark:border-neutral-700/80 bg-cover bg-center bg-no-repeat object-cover shadow-black/40" />
+      </span>
+      <div className="flex flex-col justify-between gap-1.5">
+        <div className="flex items-center gap-2">
+          <XSkeleton className="inline-block align-text-bottom w-10 h-10 rounded-lg border-background/50" />
+          <div className="flex flex-col gap-1 w-2/3">
+            <XSkeleton
+              className={cn(
+                "text-base leading-snug font-semibold text-muted-foreground line-clamp-1 w-2/3 h-4"
+              )}
+            />
+            <XSkeleton
+              className={cn(
+                "text-base leading-snug font-semibold text-accent-foreground line-clamp-1 w-2/3 h-4"
+              )}
+            />
+          </div>
+        </div>
+        <XSkeleton
+          className={cn(
+            "flex-1 text-sm text-accent-foreground line-clamp-2 min-h-4"
+          )}
+        />
+        <XSkeleton
+          className={cn(
+            "flex-1 text-sm text-accent-foreground line-clamp-2 min-h-4 w-2/3"
+          )}
+        />
+        <div className="flex items-center gap-4 text-xs text-muted-foreground">
+          <div className="flex items-center gap-1">
+            <XSkeleton className={cn("h-3 w-3 p-[2px] rounded-full")} />
+            <XSkeleton className="text-sm w-12 h-3"></XSkeleton>
+          </div>
+          <div className="flex items-center gap-1">
+            <XSkeleton className={cn("h-3 w-3 p-[2px] rounded-full")} />
+            <XSkeleton className="text-sm w-12 h-3"></XSkeleton>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const RepoCardLayoutSkeleton = () => {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-4 w-full">
+      <RepoCardSkeleton />
+      <RepoCardSkeleton />
+      <RepoCardSkeleton />
+      <RepoCardSkeleton />
+      <RepoCardSkeleton />
+      <RepoCardSkeleton />
+    </div>
+  )
+}
+
 export default function Home() {
   const router = useRouter()
   const [isClient, setIsClient] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const repoStore = useRepoStore()
   const [currentRepoList, setCurrentRepoList] = useState<Repo[]>([])
 
   const handleInitialData = useCallback(async () => {
+    setIsLoading(true)
     const res = await fetchData()
     repoStore.setCollectionList(res.collectionList)
     repoStore.setRepoList(res.repoList)
     res.repoList && setCurrentRepoList(res.repoList)
+    setIsLoading(false)
   }, [])
 
   const handleOpenRepo = (repo: Repo) => {
@@ -80,7 +147,7 @@ export default function Home() {
             <FloatingHeader scrollTitle="Repo Gallery" />
 
             <header className="flex h-16 items-center mx-auto bg-background/60 backdrop-blur fixed w-full top-0 z-50 border-b dark:border-neutral-800">
-              <div className="container max-w-screen-xl flex justify-between px-4 sm:px-8">
+              <div className="container max-w-screen-lg flex justify-between px-4 sm:px-8">
                 <div className="mr-4">
                   <a
                     className="flex items-center justify-center space-x-3 text-lg font-semibold py-6 text-center text-neutral-600 dark:text-neutral-100 selection:bg-emerald-500 mr-10"
@@ -141,7 +208,10 @@ export default function Home() {
               </div>
             </section>
             <section className="container max-w-screen-lg mt-12 sm:mt-24 flex items-center justify-between">
-              <Suspense fallback={<LoadingSpinner />}>
+              <XSkeletonWithLoading
+                loading={isLoading}
+                fallback={<RepoCardLayoutSkeleton />}
+              >
                 {/* <!-- Masnory Layout for Bookmark Card --> */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-4">
                   {currentRepoList.map((repo, index) => {
@@ -173,9 +243,9 @@ export default function Home() {
                     )
                   })}
                 </div>
-              </Suspense>
+              </XSkeletonWithLoading>
             </section>
-            <footer className="container max-w-screen-xl w-full h-16 mt-24 sm:mt-32 flex items-center justify-between  px-4 sm:px-8">
+            <footer className="container max-w-screen-lg w-full h-16 mt-24 sm:mt-32 flex items-center justify-between  px-4 sm:px-8">
               <div className="flex items-center justify-center lg:justify-start lg:flex-1 gap-x-1.5 lg:mt-0 ">
                 <a
                   className="flex items-center justify-center space-x-3 text-lg font-semibold text-center text-neutral-600 dark:text-neutral-100 selection:bg-emerald-500 mr-10"

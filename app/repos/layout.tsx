@@ -4,16 +4,17 @@ import { Suspense, cache, useEffect, useState } from "react"
 import { cloneDeep, isEmpty } from "lodash-es"
 import Fuse from "fuse.js"
 import { useDebounceCallback } from "usehooks-ts"
+import { useRouter } from "next/navigation"
+import { SearchIcon } from "lucide-react"
 
 import { SideMenu } from "@/components/SideMenu"
 import { LoadingSpinner } from "@/components/LoadingSpinner"
 import { ListItem } from "@/components/ListItem"
+import { XInput } from "@/components/ui/XInput"
+
 import { createCollectionList, formatSlug } from "@/lib/utils"
 import { Repo } from "@/lib/types"
 import { useRepoStore } from "@/store/repo"
-import { XInput } from "@/components/ui/XInput"
-import { useRouter } from "next/navigation"
-import { SearchIcon } from "lucide-react"
 
 async function fetchData() {
   const res = await fetch("/api/sdb/repos", {
@@ -50,9 +51,7 @@ export default function ReposLayout({
   const [cloneCollectionList, setCloneCollectionList] = useState(
     cloneDeep(collectionList)
   )
-  const [cloneRepoList, setCloneRepoList] = useState(
-    cloneDeep(repoList)
-  )
+  const [cloneRepoList, setCloneRepoList] = useState(cloneDeep(repoList))
 
   const fuse = cache(() => {
     const fuseIndex = Fuse.createIndex(fuseOptions.keys, repoList)
