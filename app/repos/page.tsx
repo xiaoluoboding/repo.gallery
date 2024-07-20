@@ -112,7 +112,7 @@ export default function ReposPage({ params }: { params: { slug: string } }) {
       {isClient && (
         <>
           <XScrollArea
-            className="bg-grid scrollable-area group/spotlight h-full"
+            className="relative bg-grid scrollable-area group/spotlight h-full"
             onMouseMove={onMouseMove}
           >
             <FloatingHeader
@@ -121,12 +121,12 @@ export default function ReposPage({ params }: { params: { slug: string } }) {
               bookmarks={collectionList}
               currentBookmark={currentCollection}
             />
-            <motion.div
+            {/* <motion.div
               style={{
                 transform: motionStyle,
               }}
-              className="spotlight opacity-0 group-hover/spotlight:opacity-100 will-change-transform bg-white/20 absolute top-0 left-0 right-auto w-64 h-64 inset-0 transform-gpu blur-3xl"
-            />
+              className="spotlight -z-1 opacity-0 group-hover/spotlight:opacity-100 will-change-transform bg-white/20 absolute top-0 left-0 right-auto w-64 h-64 inset-0 transform-gpu blur-3xl"
+            /> */}
             <div className="content 2xl:max-w-screen-xl p-8 2xl:p-24 overflow-y-auto">
               <Suspense fallback={<LoadingSpinner />}>
                 {/* <!-- Masnory Layout for Bookmark Card --> */}

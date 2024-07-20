@@ -47,7 +47,13 @@ export default function ReposLayout({
   const [searchText, setSearchText] = useState("")
   const repoStore = useRepoStore()
   const repoList = useRepoStore((state) => state.repoList)
-  const collectionList = useRepoStore((state) => state.collectionList)
+  const collectionList = useRepoStore((state) => {
+    return state.collectionList
+      .filter((item) => item.count > 5)
+      .sort((a, b) => {
+        return b.count - a.count
+      })
+  })
   const [cloneCollectionList, setCloneCollectionList] = useState(
     cloneDeep(collectionList)
   )

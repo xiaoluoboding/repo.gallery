@@ -3,13 +3,13 @@ import { cva } from "class-variance-authority"
 import Link, { LinkProps } from "next/link"
 
 export const buttonLinkVariants = cva(
-  "flex items-center space-x-1 rounded-lg border text-sm px-2 py-1 transition-all hover:ring-4 hover:ring-gray-200 disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed disabled:hover:ring-0 disabled:border-gray-200",
+  "flex items-center space-x-1 rounded-lg border text-sm px-2 py-1 transition-all hover:ring-2 hover:ring-neutral-200 disabled:bg-neutral-100 disabled:text-neutral-500 disabled:cursor-not-allowed disabled:hover:ring-0 disabled:border-neutral-200",
   {
     variants: {
       variant: {
-        primary: "border-black bg-black text-white hover:bg-gray-800",
+        primary: "border-black bg-black text-white hover:bg-neutral-800",
         secondary:
-          "border-gray-200 bg-white hover:border-gray-600 hover:text-gray-800 text-gray-500",
+          "border-neutral-200 bg-white hover:border-neutral-600 hover:text-neutral-800 text-neutral-500",
       },
     },
     defaultVariants: {
