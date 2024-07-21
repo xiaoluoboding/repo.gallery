@@ -24,6 +24,7 @@ import { UpdateBookmarkForm } from "./modules/UpdateBookmarkForm"
 import { formatSlug, isProd } from "@/lib/utils"
 import { useRouter } from "next/navigation"
 import FlipTilt from "react-flip-tilt"
+import SiteHeader from "@/components/SiteHeader"
 
 // export async function generateStaticParams() {
 //   return collectionList.map((collection: Collection) => ({
@@ -119,76 +120,83 @@ export default function ReposPage({ params }: { params: { slug: string } }) {
               scrollTitle={currentCollection?.title}
               goBackLink="/repos"
               bookmarks={collectionList}
-              currentBookmark={currentCollection}
+              currentRepo={currentCollection}
             />
+            <SiteHeader />
             {/* <motion.div
               style={{
                 transform: motionStyle,
               }}
               className="spotlight -z-1 opacity-0 group-hover/spotlight:opacity-100 will-change-transform bg-white/20 absolute top-0 left-0 right-auto w-64 h-64 inset-0 transform-gpu blur-3xl"
             /> */}
-            <div className="content 2xl:max-w-screen-xl p-8 2xl:p-24 overflow-y-auto">
-              <Suspense fallback={<LoadingSpinner />}>
-                {/* <!-- Masnory Layout for Bookmark Card --> */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
-                  {currentRepoList.map((repo, index) => {
-                    return (
-                      <div
-                        key={repo.link + repo.id}
-                        className="relative cursor-pointer h-full"
-                        onClick={() => handleOpenRepo(repo)}
-                      >
-                        {/* <BookmarkCard tidy bookmark={repo} order={index} /> */}
-                        <FlipTilt
-                          front={
-                            <BookmarkCard tidy bookmark={repo} order={index} />
-                          }
-                          back={
-                            <BookmarkCard
-                              tidy
-                              flip
-                              bookmark={repo}
-                              order={index}
-                            />
-                          }
-                          borderColor="rgba(255, 255, 255, 0)"
-                          borderWidth="0px"
-                          className="border-none h-full"
-                          stiffness={48}
-                        />
-                        {!isProd && (
-                          <div className="absolute top-6 right-6 flex items-center gap-2">
-                            <XButton
-                              disabled={isLoading}
-                              variant={"outline"}
-                              size="icon"
-                              onClick={(e) => {
-                                e.preventDefault()
-                                e.stopPropagation()
-                                handleOpenDrawer(repo)
-                              }}
-                            >
-                              <SquarePenIcon className="w-4 h-4" />
-                            </XButton>
-                            <XButton
-                              disabled={isLoading}
-                              variant={"outline"}
-                              size="icon"
-                              onClick={(e) => {
-                                e.preventDefault()
-                                e.stopPropagation()
-                                handleDeleteCard(repo.id)
-                              }}
-                            >
-                              <XIcon className="w-4 h-4" />
-                            </XButton>
-                          </div>
-                        )}
-                      </div>
-                    )
-                  })}
-                </div>
-              </Suspense>
+            <div className="content-wrapper my-24 lg:my-32">
+              <div className="content max-w-screen-lg 2xl:max-w-screen-xl overflow-y-auto">
+                <Suspense fallback={<LoadingSpinner />}>
+                  {/* <!-- Masnory Layout for Bookmark Card --> */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
+                    {currentRepoList.map((repo, index) => {
+                      return (
+                        <div
+                          key={repo.link + repo.id}
+                          className="relative cursor-pointer h-full"
+                          onClick={() => handleOpenRepo(repo)}
+                        >
+                          {/* <BookmarkCard tidy bookmark={repo} order={index} /> */}
+                          <FlipTilt
+                            front={
+                              <BookmarkCard
+                                tidy
+                                bookmark={repo}
+                                order={index}
+                              />
+                            }
+                            back={
+                              <BookmarkCard
+                                tidy
+                                flip
+                                bookmark={repo}
+                                order={index}
+                              />
+                            }
+                            borderColor="rgba(255, 255, 255, 0)"
+                            borderWidth="0px"
+                            className="border-none h-full"
+                            stiffness={48}
+                          />
+                          {!isProd && (
+                            <div className="absolute top-6 right-6 flex items-center gap-2">
+                              <XButton
+                                disabled={isLoading}
+                                variant={"outline"}
+                                size="icon"
+                                onClick={(e) => {
+                                  e.preventDefault()
+                                  e.stopPropagation()
+                                  handleOpenDrawer(repo)
+                                }}
+                              >
+                                <SquarePenIcon className="w-4 h-4" />
+                              </XButton>
+                              <XButton
+                                disabled={isLoading}
+                                variant={"outline"}
+                                size="icon"
+                                onClick={(e) => {
+                                  e.preventDefault()
+                                  e.stopPropagation()
+                                  handleDeleteCard(repo.id)
+                                }}
+                              >
+                                <XIcon className="w-4 h-4" />
+                              </XButton>
+                            </div>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </Suspense>
+              </div>
             </div>
           </XScrollArea>
           <XDrawer

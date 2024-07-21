@@ -41,7 +41,7 @@ export const SideMenu = ({
   }
 
   const isReposPath = pathname.startsWith("/repos")
-  const currentBookmark = bookmarks.find(
+  const currentRepo = bookmarks.find(
     (bookmark) => `/repos/${bookmark.slug}` === pathname
   )
 
@@ -60,7 +60,7 @@ export const SideMenu = ({
               {title}
             </span>
             <div className="flex items-center gap-2">
-              {(isReposPath) && (
+              {isReposPath && (
                 <XButton variant="outline" size="sm" asChild>
                   <a
                     href={"/repos.xml"}
@@ -77,7 +77,7 @@ export const SideMenu = ({
               {isReposPath && !isProd && (
                 <SubmitBookmarkDialog
                   repos={bookmarks}
-                  currentBookmark={currentBookmark}
+                  currentRepo={currentRepo}
                 />
               )}
             </div>

@@ -17,10 +17,10 @@ import { InsertBookmarkForm } from "@/app/repos/modules/InsertBookmarkForm"
 
 interface IProps {
   repos: Repo[]
-  currentBookmark: Repo
+  currentRepo: Repo
 }
 
-export const SubmitBookmarkDialog = ({ repos, currentBookmark }: IProps) => {
+export const SubmitBookmarkDialog = ({ repos, currentRepo }: IProps) => {
   const [open, setOpen] = useState(false)
 
   return (
@@ -47,7 +47,7 @@ export const SubmitBookmarkDialog = ({ repos, currentBookmark }: IProps) => {
         <InsertBookmarkForm
           setDialogOpen={setOpen}
           repos={repos}
-          currentBookmark={currentBookmark}
+          currentRepo={currentRepo}
         />
       </XDialogContent>
     </XDialog>

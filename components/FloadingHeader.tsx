@@ -18,7 +18,7 @@ interface IProps {
   title?: string
   goBackLink?: string
   bookmarks?: any
-  currentBookmark?: any
+  currentRepo?: any
   children?: React.ReactNode
 }
 
@@ -28,7 +28,7 @@ export const FloatingHeader = memo(
     title,
     goBackLink,
     bookmarks,
-    currentBookmark,
+    currentRepo,
     children,
   }: IProps) => {
     const [transformValues, setTransformValues] = useState({
@@ -141,7 +141,7 @@ export const FloatingHeader = memo(
                   {isBookmarkPath && !isProd && (
                     <SubmitBookmarkDialog
                       repos={bookmarks}
-                      currentBookmark={currentBookmark}
+                      currentRepo={currentRepo}
                     />
                   )}
                   <DarkmodeToggle accent={isDockIndexPage} />

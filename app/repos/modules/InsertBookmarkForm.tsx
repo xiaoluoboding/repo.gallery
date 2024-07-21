@@ -47,14 +47,14 @@ interface IProps {
   className?: string
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
   repos: Repo[]
-  currentBookmark?: Repo
+  currentRepo?: Repo
 }
 
 export function InsertBookmarkForm({
   className,
   setDialogOpen,
   repos,
-  currentBookmark,
+  currentRepo,
 }: IProps) {
   const [isLoading, setIsLoading] = useState(false)
   const repoStore = useRepoStore()
@@ -63,7 +63,7 @@ export function InsertBookmarkForm({
     defaultValues: {
       link: "",
       // email: "",
-      tags: currentBookmark?.title ?? "",
+      tags: currentRepo?.title ?? "",
     },
   })
   const {

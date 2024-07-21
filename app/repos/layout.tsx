@@ -119,7 +119,7 @@ export default function ReposLayout({
     <>
       {isClient && (
         <div className="flex w-full">
-          <SideMenu
+          {/* <SideMenu
             title={`Repos (${repoList.length})`}
             bookmarks={collectionList}
             isInner
@@ -152,7 +152,7 @@ export default function ReposLayout({
                 })}
               </div>
             </Suspense>
-          </SideMenu>
+          </SideMenu> */}
           <div className="lg:bg-grid flex-1 relative">{children}</div>
         </div>
       )}

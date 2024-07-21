@@ -1,11 +1,14 @@
 import Link from "next/link"
-import { PlusIcon, StarIcon } from "lucide-react"
+import { StarIcon } from "lucide-react"
 
 import { Logo } from "@/components/Logo"
 import { XButton } from "@/components/ui/XButton"
 import { DarkmodeToggle } from "@/components/DarkmodeToggle"
+import { SubmitBookmarkDialog } from "./dialog/SubmitBookmarkDialog"
+import { useRepoStore } from "@/store/repo"
 
 const SiteHeader = () => {
+  const repoStore = useRepoStore()
   return (
     <header className="flex h-16 items-center mx-auto bg-background/60 backdrop-blur fixed w-full top-0 z-50 border-b dark:border-neutral-800">
       <div className="container max-w-screen-lg flex justify-between px-4 sm:px-8">
@@ -44,10 +47,10 @@ const SiteHeader = () => {
               <StarIcon className="h-4 w-4 mr-1" />
               Star
             </XButton>
-            <XButton size="sm" variant="default">
-              <PlusIcon className="h-4 w-4 mr-1" />
-              Submit
-            </XButton>
+            <SubmitBookmarkDialog
+              repos={repoStore.repoList}
+              currentRepo={repoStore.repoList[0]}
+            />
           </div>
         </div>
       </div>

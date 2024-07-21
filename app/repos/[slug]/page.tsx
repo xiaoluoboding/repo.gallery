@@ -31,6 +31,7 @@ import {
 import { useTheme } from "next-themes"
 import FlipCard from "@/components/BookmarkCard/FlipCard"
 import { FloatingHeader } from "@/components/FloadingHeader"
+import SiteHeader from "@/components/SiteHeader"
 
 // export async function generateStaticParams() {
 //   return collectionList.map((collection: Collection) => ({
@@ -91,15 +92,16 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
               scrollTitle={currentRepo?.slug}
               goBackLink="/repos"
               bookmarks={repoList}
-              currentBookmark={currentRepo}
+              currentRepo={currentRepo}
             />
+            <SiteHeader />
             {/* <motion.div
               style={{
                 transform: motionStyle,
               }}
               className="spotlight opacity-0 group-hover/spotlight:opacity-100 will-change-transform bg-white/20 absolute top-0 left-0 right-auto w-40 h-40 inset-0 transform-gpu blur-3xl"
             /> */}
-            <div className="content-wrapper">
+            <div className="content-wrapper my-24 lg:my-32">
               <div className="content @container max-w-screen-md bg-neutral-50 dark:bg-neutral-900 p-8 border border-border rounded-lg">
                 <Suspense fallback={<LoadingSpinner />}>
                   <div
