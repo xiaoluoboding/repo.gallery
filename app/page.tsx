@@ -1,22 +1,15 @@
 "use client"
 
-import { Suspense, useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 
-import Image from "next/image"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 import FlipTilt from "react-flip-tilt"
-import { PlusIcon, Star } from "lucide-react"
 
-import { LoadingSpinner } from "@/components/LoadingSpinner"
 import { XScrollArea } from "@/components/ui/XScrollArea"
 import { FloatingHeader } from "@/components/FloadingHeader"
 import { useRepoStore } from "@/store/repo"
-import { PROFILES } from "@/lib/useConstants"
 import { cn, createCollectionList } from "@/lib/utils"
-import { Logo } from "@/components/Logo"
-import { XButton } from "@/components/ui/XButton"
-import { DarkmodeToggle } from "@/components/DarkmodeToggle"
+
 import { Repo } from "@/lib/types"
 import { BookmarkCard } from "@/components/BookmarkCard/BookmarkCard"
 import GridPattern from "@/components/GridPattern"

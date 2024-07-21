@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/XSelect"
 import { XInput } from "@/components/ui/XInput"
 import { cn } from "@/lib/utils"
-import { Repo, Bookmark } from "@/lib/types"
+import { Repo, Bookmark, Collection } from "@/lib/types"
 import { useRepoStore } from "@/store/repo"
 import { getRepo, getRepoLanguageColor } from "@/lib/github"
 
@@ -46,18 +46,19 @@ const formSchema = z.object({
 interface IProps {
   className?: string
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
-  repos: Repo[]
   currentRepo?: Repo
 }
 
 export function InsertBookmarkForm({
   className,
   setDialogOpen,
-  repos,
   currentRepo,
 }: IProps) {
   const [isLoading, setIsLoading] = useState(false)
   const repoStore = useRepoStore()
+  const collectionList = useRepoStore((state) =>
+    state.collectionList.filter((c) => c.title)
+  )
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -213,9 +214,9 @@ export function InsertBookmarkForm({
                   </XSelectTrigger>
                 </XFormControl>
                 <XSelectContent>
-                  {repos?.map((repo) => (
-                    <XSelectItem key={repo.title} value={repo.title}>
-                      {repo.title}
+                  {collectionList?.map((c) => (
+                    <XSelectItem key={c.title} value={c.title}>
+                      {c.title}
                     </XSelectItem>
                   ))}
                 </XSelectContent>

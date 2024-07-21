@@ -63,11 +63,11 @@ export const tryCatchNextResponse = async <T>(
 
 export const createCollectionList = (RepoList: Repo[]) => {
   const groupedBookmarkList = groupBy(RepoList, (item) => {
-    return item.topics
+    return item.tags.map((tag) => tag.name)
   })
 
   const tagList = RepoList.map((item) => {
-    return item.topics
+    return item.tags.map((tag) => tag.name)
   })
   const uniqTagList = uniq(tagList.flat(1))
 
