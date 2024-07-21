@@ -130,7 +130,7 @@ export default function ReposPage({ params }: { params: { slug: string } }) {
               className="spotlight -z-1 opacity-0 group-hover/spotlight:opacity-100 will-change-transform bg-white/20 absolute top-0 left-0 right-auto w-64 h-64 inset-0 transform-gpu blur-3xl"
             /> */}
             <div className="content-wrapper my-24 lg:my-32">
-              <div className="content max-w-screen-lg 2xl:max-w-screen-xl overflow-y-auto">
+              <div className="content max-w-screen-lg 2xl:max-w-screen-lg overflow-y-auto">
                 <Suspense fallback={<LoadingSpinner />}>
                   {/* <!-- Masnory Layout for Bookmark Card --> */}
                   <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">

@@ -26,7 +26,7 @@ export function DarkmodeToggle({ accent = false }) {
           </div>
         </XButton>
       </XDropdownMenuTrigger>
-      <XDropdownMenuContent align="end">
+      <XDropdownMenuContent className="border-border" align="end">
         <XDropdownMenuItem onClick={() => setTheme("light")}>
           Light
         </XDropdownMenuItem>
