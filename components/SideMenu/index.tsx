@@ -75,10 +75,7 @@ export const SideMenu = ({
                 </XButton>
               )}
               {isReposPath && !isProd && (
-                <SubmitBookmarkDialog
-                  repos={bookmarks}
-                  currentRepo={currentRepo}
-                />
+                <SubmitBookmarkDialog currentRepo={currentRepo} />
               )}
             </div>
           </div>

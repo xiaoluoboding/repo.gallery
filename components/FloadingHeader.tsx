@@ -139,10 +139,7 @@ export const FloatingHeader = memo(
                     </XButton>
                   )}
                   {isBookmarkPath && !isProd && (
-                    <SubmitBookmarkDialog
-                      repos={bookmarks}
-                      currentRepo={currentRepo}
-                    />
+                    <SubmitBookmarkDialog currentRepo={currentRepo} />
                   )}
                   <DarkmodeToggle accent={isDockIndexPage} />
                 </div>

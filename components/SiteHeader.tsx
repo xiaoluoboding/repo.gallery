@@ -47,10 +47,7 @@ const SiteHeader = () => {
               <StarIcon className="h-4 w-4 mr-1" />
               Star
             </XButton>
-            <SubmitBookmarkDialog
-              repos={repoStore.collectionList}
-              currentRepo={repoStore.repoList[0]}
-            />
+            <SubmitBookmarkDialog currentRepo={repoStore.repoList[0]} />
           </div>
         </div>
       </div>
