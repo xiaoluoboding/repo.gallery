@@ -9,6 +9,7 @@ import { ChangeEvent, useState } from "react"
 import { nanoid } from "nanoid"
 import { MinusIcon, PlusIcon } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
+import { pick } from "lodash-es"
 
 import {
   XForm,
@@ -22,8 +23,9 @@ import {
 import { XButton } from "@/components/ui/XButton"
 import { XInput } from "@/components/ui/XInput"
 import { XTextarea } from "@/components/ui/XTextarea"
-import { Repo } from "@/lib/types"
+import { Bookmark, Repo } from "@/lib/types"
 import { useRepoStore } from "@/store/repo"
+import { getRepo, getRepoLanguageColor } from "@/lib/github"
 
 const formSchema = z.object({
   title: z.string().min(0, {
@@ -45,10 +47,7 @@ interface UpdateFormProps {
   repo: Repo
 }
 
-export function UpdateBookmarkForm({
-  repo,
-  setDialogOpen,
-}: UpdateFormProps) {
+export function UpdateBookmarkForm({ repo, setDialogOpen }: UpdateFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const repoStore = useRepoStore()
   // 1. Define your form.
@@ -94,42 +93,80 @@ export function UpdateBookmarkForm({
   }
 
   const handleAddEmptyTag = () => {
-    const newTagList = [
-      ...repo.tags,
-      { id: nanoid(32), name: "", color: "" },
-    ]
+    const newTagList = [...repo.tags, { id: nanoid(32), name: "", color: "" }]
     form.setValue("tags", newTagList)
   }
 
-  async function handleUpdateBookmarkByLink(link: string) {
-    setIsLoading(true)
-    let data: Partial<Repo> = {}
+  const handleFetchBookmarkMetadata = async (link: string) => {
+    let data: Partial<Bookmark> = {}
     try {
-      const res = await fetch(`https://metafy.vercel.app/api?url=${link}`, {
+      const res = await fetch(`/api/metafy/${encodeURIComponent(link)}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       })
-      data = (await res.json()) as Partial<Repo>
+      data = (await res.json()) as Partial<Bookmark>
+      return data
     } catch (error) {
       console.log(error)
-      setIsLoading(false)
+      return {}
     }
-    const newBookmark = {
+  }
+
+  async function handleUpdateBookmarkByLink(link: string) {
+    setIsLoading(true)
+    const metadata = await handleFetchBookmarkMetadata(link)
+    const repodata = await getRepo(link)
+    const languageColor = await getRepoLanguageColor(repodata.language)
+    const repoRecord = {
       ...repo,
-      ...data,
+      ...metadata,
+      ...repodata,
+      original_image: metadata.originalOGImage,
+      language: repodata.language === null ? "Markdown" : repodata.language,
+      language_color: languageColor,
+    }
+
+    const pickedRepoRecord = {
+      ...pick(repoRecord, [
+        "title",
+        "slug",
+        "homepage",
+        "description",
+        "image",
+        "original_image",
+        "logo",
+        "author",
+        "publisher",
+        "language",
+        "language_color",
+        "stars",
+        "forks",
+        "contributors",
+        "used_by",
+        "issues",
+        "discussions",
+        "tags",
+        "topics",
+        "owner_name",
+        "owner_url",
+        "owner_avatar",
+        "owner_type",
+        "created_at",
+      ]),
       link: form.getValues("link"),
       tags: form.getValues("tags"),
       updated_at: dayjs().valueOf(),
     }
+
     try {
       await fetch(`/api/sdb/repos/${repo.id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newBookmark),
+        body: JSON.stringify(pickedRepoRecord),
       })
       setIsLoading(false)
     } catch (error) {

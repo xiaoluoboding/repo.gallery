@@ -20,10 +20,7 @@ interface IProps {
   currentBookmark: Repo
 }
 
-export const SubmitBookmarkDialog = ({
-  repos,
-  currentBookmark,
-}: IProps) => {
+export const SubmitBookmarkDialog = ({ repos, currentBookmark }: IProps) => {
   const [open, setOpen] = useState(false)
 
   return (
@@ -38,13 +35,13 @@ export const SubmitBookmarkDialog = ({
           </span>
         </XButton>
       </XDialogTrigger>
-      <XDialogContent>
+      <XDialogContent className="border-border">
         <XDialogHeader>
           <XDialogTitle>Submit a repo</XDialogTitle>
           <XDialogDescription>
             Send me a website you like and if I like it too, you&apos;ll see it
-            in the repos list. With respect, please do not submit more than
-            5 websites a day.
+            in the repos list. With respect, please do not submit more than 5
+            websites a day.
           </XDialogDescription>
         </XDialogHeader>
         <InsertBookmarkForm

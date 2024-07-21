@@ -31,7 +31,7 @@ import { XInput } from "@/components/ui/XInput"
 import { cn } from "@/lib/utils"
 import { Repo, Bookmark } from "@/lib/types"
 import { useRepoStore } from "@/store/repo"
-import { getRepo } from "@/lib/github"
+import { getRepo, getRepoLanguageColor } from "@/lib/github"
 
 const formSchema = z.object({
   link: z.string().url({
@@ -86,35 +86,6 @@ export function InsertBookmarkForm({
     } catch (error) {
       console.log(error)
       return {}
-    }
-  }
-
-  const getRepoLanguageColor = async (lang: string): Promise<string> => {
-    let data: {
-      status: number
-      language: string
-      color: string
-    } = {
-      status: 200,
-      language: "",
-      color: "",
-    }
-    try {
-      const res = await fetch(`/api/linguist/${encodeURIComponent(lang)}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      data = (await res.json()) as {
-        status: number
-        language: string
-        color: string
-      }
-      return data.color
-    } catch (error) {
-      console.log(error)
-      return ""
     }
   }
 

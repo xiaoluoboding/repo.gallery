@@ -199,10 +199,10 @@ export default function ReposPage({ params }: { params: { slug: string } }) {
           >
             <XDrawerPortal>
               <XDrawerOverlay className="fixed inset-0 bg-black/40" />
-              <XDrawerContent className="fixed bottom-0 right-0 flex h-full w-2/5 flex-col rounded-l-lg bg-gray-100">
+              <XDrawerContent className="fixed bottom-0 right-0 flex h-full w-2/5 flex-col rounded-l-lg bg-background border-border">
                 <div className="flex-1 overflow-y-auto rounded-l-lg bg-background">
                   <XDrawerHeader className="font-semibold text-xl text-accent-foreground">
-                    Update Bookmark
+                    Update Repo
                   </XDrawerHeader>
 
                   <div className="p-4 gap-4">
