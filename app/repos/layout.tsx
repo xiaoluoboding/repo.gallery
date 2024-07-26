@@ -25,7 +25,7 @@ async function fetchData() {
   })
   const repoList = (await res.json()) as Repo[]
   const collectionList = createCollectionList(repoList)
-  console.log(collectionList)
+  // console.log(collectionList)
 
   return {
     repoList,

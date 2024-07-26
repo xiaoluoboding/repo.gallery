@@ -1,21 +1,23 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 import { useRouter } from "next/navigation"
 import FlipTilt from "react-flip-tilt"
 
-import { XScrollArea } from "@/components/ui/XScrollArea"
-import { FloatingHeader } from "@/components/FloadingHeader"
 import { useRepoStore } from "@/store/repo"
 import { cn, createCollectionList } from "@/lib/utils"
-
 import { Repo } from "@/lib/types"
+
+// component
 import { BookmarkCard } from "@/components/BookmarkCard/BookmarkCard"
 import GridPattern from "@/components/GridPattern"
 import { XSkeleton, XSkeletonWithLoading } from "@/components/ui/XSkeleton"
 import SiteHeader from "@/components/SiteHeader"
 import SiteFooter from "@/components/SiteFooter"
+import { XScrollArea } from "@/components/ui/XScrollArea"
+import { FloatingHeader } from "@/components/FloadingHeader"
+import FilterInput from "@/components/FilterInput"
 
 async function fetchData() {
   const res = await fetch("/api/sdb/repos", {
@@ -100,15 +102,20 @@ export default function Home() {
   const router = useRouter()
   const [isClient, setIsClient] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+
   const repoStore = useRepoStore()
   const [currentRepoList, setCurrentRepoList] = useState<Repo[]>([])
+  const [originalRepoList, setOriginalRepoList] = useState<Repo[]>([])
 
   const handleInitialData = useCallback(async () => {
     setIsLoading(true)
     const res = await fetchData()
     repoStore.setCollectionList(res.collectionList)
     repoStore.setRepoList(res.repoList)
-    res.repoList && setCurrentRepoList(res.repoList)
+    if (res.repoList) {
+      setCurrentRepoList(res.repoList)
+      setOriginalRepoList(res.repoList)
+    }
     setIsLoading(false)
   }, [])
 
@@ -157,8 +164,16 @@ export default function Home() {
               </div>
             </section>
 
-            {/* <!-- Repo List --> */}
             <section className="container max-w-screen-lg mt-12 sm:mt-24 flex items-center justify-between">
+              <FilterInput
+                list={currentRepoList}
+                originalList={originalRepoList}
+                setList={setCurrentRepoList}
+              />
+            </section>
+
+            {/* <!-- Repo List --> */}
+            <section className="container max-w-screen-lg flex items-center justify-between">
               <XSkeletonWithLoading
                 loading={isLoading}
                 fallback={<RepoCardLayoutSkeleton />}
@@ -168,7 +183,7 @@ export default function Home() {
                   {currentRepoList.map((repo, index) => {
                     return (
                       <div
-                        key={repo.link + repo.id}
+                        key={repo.id}
                         className="relative cursor-pointer h-full"
                         onClick={() => handleOpenRepo(repo)}
                       >

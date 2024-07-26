@@ -104,7 +104,7 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
                         }
                       />
                     </div>
-                    <div className="relative flex items-center justify-between gap-2">
+                    <div className="relative flex items-center gap-2">
                       <Image
                         src={currentRepo.owner_avatar || currentRepo.image}
                         alt={currentRepo.title}
@@ -112,7 +112,7 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
                         height={100}
                         className="h-16 w-16 bg-background border-border sm:h-24 sm:w-24"
                       />
-                      <div className="max-w-lg p-4 pb-0">
+                      <div className="flex-1 p-4 pb-0">
                         <div className="flex items-center space-x-2">
                           <h1 className="font-display text-3xl font-bold">
                             {currentRepo.title}
