@@ -174,7 +174,7 @@ export default function Home() {
               </div>
             </section>
 
-            <section className="container max-w-screen-lg mt-12 sm:mt-24 flex items-center justify-between">
+            <section className="container max-w-screen-lg mt-12 sm:mt-24 mb-8 flex items-center justify-between">
               <FilterBar
                 list={currentRepoList}
                 originalList={originalRepoList}

@@ -29,6 +29,7 @@ import { GitHubLogoIcon } from "@radix-ui/react-icons"
 import LibHuntIcon from "@/assets/images/libhunt.png"
 import OpenSauced from "@/components/icons/OpenSauced"
 import SourceGraph from "@/components/icons/SourceGraph"
+import SiteFooter from "@/components/SiteFooter"
 
 // export async function generateStaticParams() {
 //   return collectionList.map((collection: Collection) => ({
@@ -73,10 +74,7 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
     <>
       {isClient && (
         <>
-          <XScrollArea
-            className="bg-grid scrollable-area group/spotlight"
-            onMouseMove={onMouseMove}
-          >
+          <XScrollArea className="bg-grid scrollable-area group/spotlight">
             <FloatingHeader
               scrollTitle={currentRepo?.slug}
               goBackLink="/repos"
@@ -168,40 +166,36 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
                     <figcaption className="text-foreground font-semibold">
                       Repository Details
                     </figcaption>
-                    <figure>
-                      <div className="flex flex-col gap-2 items-center py-4">
-                        <div className="w-full flex gap-2 items-center justify-between text-foreground">
-                          <span className="text-muted-foreground flex items-center gap-1 text-sm">
-                            <Star className="h-4 w-4" />
-                            <span className="">Stars</span>
-                          </span>
-                          <span className="text-sm">
-                            {currentRepo.stars.toLocaleString("en-US")}
-                          </span>
-                        </div>
-                        <div className="w-full flex gap-2 items-center justify-between text-foreground">
-                          <span className="text-muted-foreground flex items-center gap-1 text-sm">
-                            <GitForkIcon className="h-4 w-4" />
-                            <span className="">Forks</span>
-                          </span>
-                          <span className="text-sm">
-                            {currentRepo.forks.toLocaleString("en-US")}
-                          </span>
-                        </div>
-                        <div className="w-full flex gap-2 items-center justify-between text-foreground">
-                          <span className="text-muted-foreground flex items-center gap-1 text-sm">
-                            <span
-                              className={cn("h-4 w-4 p-[2px] rounded-full")}
-                              style={{
-                                backgroundColor: currentRepo.language_color,
-                              }}
-                            />
-                            <span className="">Written in </span>
-                          </span>
-                          <span className="text-sm">
-                            {currentRepo.language}
-                          </span>
-                        </div>
+                    <figure className="flex flex-col gap-2 items-center mt-4">
+                      <div className="w-full flex gap-2 items-center justify-between text-foreground">
+                        <span className="text-muted-foreground flex items-center gap-1 text-sm">
+                          <Star className="h-4 w-4" />
+                          <span className="">Stars</span>
+                        </span>
+                        <span className="text-sm">
+                          {currentRepo.stars.toLocaleString("en-US")}
+                        </span>
+                      </div>
+                      <div className="w-full flex gap-2 items-center justify-between text-foreground">
+                        <span className="text-muted-foreground flex items-center gap-1 text-sm">
+                          <GitForkIcon className="h-4 w-4" />
+                          <span className="">Forks</span>
+                        </span>
+                        <span className="text-sm">
+                          {currentRepo.forks.toLocaleString("en-US")}
+                        </span>
+                      </div>
+                      <div className="w-full flex gap-2 items-center justify-between text-foreground">
+                        <span className="text-muted-foreground flex items-center gap-1 text-sm">
+                          <span
+                            className={cn("h-4 w-4 p-[2px] rounded-full")}
+                            style={{
+                              backgroundColor: currentRepo.language_color,
+                            }}
+                          />
+                          <span className="">Written in </span>
+                        </span>
+                        <span className="text-sm">{currentRepo.language}</span>
                       </div>
                     </figure>
                   </fieldset>
@@ -253,6 +247,18 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
                         })}
                       >
                         <span className="text-sm">View on GitHub</span>
+                        <GitHubLogoIcon className="h-4 w-4" />
+                      </a>
+                      <a
+                        href={`https://github.dev/${currentRepo.slug}`}
+                        target="_blank"
+                        className={buttonVariants({
+                          variant: "secondary",
+                          className: "gap-2 w-full flex !justify-between",
+                          size: "sm",
+                        })}
+                      >
+                        <span className="text-sm">View on github.dev</span>
                         <GitHubLogoIcon className="h-4 w-4" />
                       </a>
                       <a
@@ -334,6 +340,9 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
                 </aside>
               </div>
             </div>
+
+            {/* <!-- Footer --> */}
+            <SiteFooter />
           </XScrollArea>
         </>
       )}

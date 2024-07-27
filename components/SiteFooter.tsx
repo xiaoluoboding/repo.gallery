@@ -13,17 +13,17 @@ const SiteFooter = () => {
         viewBox="0 0 1367.743 181.155"
       >
         <path
-          className="fill-current text-neutral-50 dark:text-neutral-900/80"
+          className="fill-current text-neutral-50 dark:text-neutral-950"
           id="wave"
           data-name="wave"
           d="M0,0S166.91-56.211,405.877-49.5,715.838,14.48,955.869,26.854,1366,0,1366,0V115H0Z"
           transform="translate(1.743 66.155)"
         ></path>
       </svg>
-      <div className="bg-gradient-to-b from-neutral-50 to-transparent dark:from-neutral-900 dark:to-transparent pt-1">
-        <div className="container m-auto space-y-8 px-6 text-neutral-600 dark:text-neutral-400 md:px-12 lg:px-20">
+      <div className="bg-gradient-to-b from-neutral-50 to-transparent dark:from-neutral-950 dark:to-transparent pt-1">
+        <div className="container max-w-screen-lg m-auto space-y-8 px-4 sm:px-8 text-neutral-600 dark:text-neutral-400">
           <div className="grid grid-cols-8 gap-6 md:gap-0">
-            <div className="col-span-8 border-r border-neutral-50 dark:border-neutral-800 md:col-span-2 lg:col-span-3">
+            <div className="col-span-8 border-r-0 md:border-r border-neutral-50 dark:border-neutral-800 md:col-span-2 lg:col-span-3">
               <div className="flex items-center justify-between gap-6 border-b border-white dark:border-neutral-800 py-6 md:block md:space-y-6 md:border-none md:py-0">
                 <a
                   className="flex items-center space-x-3 text-lg font-semibold text-neutral-600 dark:text-neutral-100 selection:bg-emerald-500 mr-10"
@@ -110,6 +110,24 @@ const SiteFooter = () => {
                         target="_blank"
                       >
                         Star Search
+                      </Link>
+                    </li>
+                    <li className="pl-0">
+                      <Link href={"https://neat.run/"} target="_blank">
+                        Neat
+                      </Link>
+                    </li>
+                    <li className="pl-0">
+                      <Link
+                        href={"https://octolinker.vercel.app/"}
+                        target="_blank"
+                      >
+                        OctoLinker
+                      </Link>
+                    </li>
+                    <li className="pl-0">
+                      <Link href={"https://grep.app/"} target="_blank">
+                        grep.app
                       </Link>
                     </li>
                   </ul>
