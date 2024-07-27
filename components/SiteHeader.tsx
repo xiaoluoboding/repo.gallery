@@ -14,21 +14,21 @@ const SiteHeader = () => {
       <div className="container max-w-screen-lg flex justify-between px-4 sm:px-8">
         <div className="mr-4">
           <a
-            className="flex items-center justify-center space-x-3 text-lg font-semibold py-6 text-center text-neutral-600 dark:text-neutral-100 selection:bg-emerald-500 mr-10"
+            className="flex items-center justify-center space-x-1 sm:space-x-3 text-lg font-semibold py-6 text-center text-neutral-600 dark:text-neutral-100 selection:bg-emerald-500 mr-10"
             href="/"
           >
-            <div className="relative h-8 w-8 md:h-6 md:w-6 bg-background text-white flex items-center justify-center rounded-md text-sm antialiased">
+            <div className="relative h-8 w-8 md:h-6 md:w-6 bg-transparent text-white flex items-center justify-center rounded-md text-sm antialiased">
               <div className="text-sm text-emerald-500 relative z-20">
-                <Logo className="w-6 h-6" />
+                <Logo className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-primary text-xl">Repo Gallery</h1>
+            <div className="flex items-center">
+              <h1 className="text-primary text-sm sm:text-xl">Repo Gallery</h1>
             </div>
           </a>
         </div>
         <div className="flex items-center gap-4">
-          <nav className="items-center space-x-2 text-sm font-medium hidden xl:flex">
+          {/* <nav className="items-center space-x-2 text-sm font-medium hidden xl:flex">
             <XButton variant="link">
               <Link href={"https://github.com/dashboard-feed"} target="_blank">
                 Dashboard Feed
@@ -40,7 +40,7 @@ const SiteHeader = () => {
             <XButton variant="link" onClick={() => {}}>
               <Link href="/topics">Topics</Link>
             </XButton>
-          </nav>
+          </nav> */}
           <div className="flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end">
             <DarkmodeToggle />
             <XButton size="sm" variant="outline">

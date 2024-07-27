@@ -14,13 +14,14 @@ import BadgeGold from "@/assets/images/starstruck-gold.png"
 import BadgeSliver from "@/assets/images/starstruck-silver.png"
 import BadgeBronze from "@/assets/images/starstruck-bronze.png"
 import { XTooltip, XTooltipContent, XTooltipTrigger } from "./ui/XTooltip"
+import { cn } from "@/lib/utils"
 
 const fuseOptions = {
   threshold: 0.2,
   keys: ["title", "link", "homepage", "description", "topics"],
 }
 
-const FilterInput = ({
+const FilterBar = ({
   list,
   originalList,
   setList,
@@ -76,7 +77,7 @@ const FilterInput = ({
   }, [stars])
 
   return (
-    <div className="w-full py-2 pb-3 grid grid-cols-2 gap-4">
+    <div className="w-full py-2 pb-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div className="w-full">
         <XInput
           size={"sm"}
@@ -96,25 +97,29 @@ const FilterInput = ({
           <XTooltipTrigger>
             <img
               src={BadgeDefault.src}
-              className="w-8 h-8 rounded-full border-none"
+              className={cn(
+                "w-8 h-8 rounded-full border-none hover:scale-105",
+                stars === 16 && "border-2 border-border"
+              )}
               alt="badge default"
               onClick={() => setStars(16)}
             />
           </XTooltipTrigger>
-          <XTooltipContent>
+          <XTooltipContent className="p-2">
             <span>Between 16 and 128 stars</span>
           </XTooltipContent>
         </XTooltip>
+
         <XTooltip>
           <XTooltipTrigger>
             <img
               src={BadgeBronze.src}
-              className="w-8 h-8 rounded-full border-none"
+              className="w-8 h-8 rounded-full border-none hover:scale-105"
               alt="badge bronze"
               onClick={() => setStars(128)}
             />
           </XTooltipTrigger>
-          <XTooltipContent>
+          <XTooltipContent className="p-2">
             <span>Between 128 and 512 stars</span>
           </XTooltipContent>
         </XTooltip>
@@ -123,12 +128,12 @@ const FilterInput = ({
           <XTooltipTrigger>
             <img
               src={BadgeSliver.src}
-              className="w-8 h-8 rounded-full border-none"
+              className="w-8 h-8 rounded-full border-none hover:scale-105"
               alt="badge sliver"
               onClick={() => setStars(512)}
             />
           </XTooltipTrigger>
-          <XTooltipContent>
+          <XTooltipContent className="p-2">
             <span>Between 512 and 4096 stars</span>
           </XTooltipContent>
         </XTooltip>
@@ -137,12 +142,12 @@ const FilterInput = ({
           <XTooltipTrigger>
             <img
               src={BadgeGold.src}
-              className="w-8 h-8 rounded-full border-none"
+              className="w-8 h-8 rounded-full border-none hover:scale-105"
               alt="badge gold"
               onClick={() => setStars(4096)}
             />
           </XTooltipTrigger>
-          <XTooltipContent>
+          <XTooltipContent className="p-2">
             <span>More than 4096 stars</span>
           </XTooltipContent>
         </XTooltip>
@@ -151,4 +156,4 @@ const FilterInput = ({
   )
 }
 
-export default FilterInput
+export default FilterBar

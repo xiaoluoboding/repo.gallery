@@ -68,7 +68,7 @@
 
 @layer base {
   ::selection {
-    @apply bg-black text-white;
+    @apply bg-neutral-950 text-neutral-50;
   }
 
   html,
@@ -189,6 +189,12 @@
 
   pre code {
     counter-reset: sh-line-number;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    ::selection {
+      @apply text-neutral-950 bg-neutral-50/50;
+    }
   }
 }
 
@@ -325,6 +331,7 @@
     bottom: 100px;
   }
 }
+
 @keyframes scale-in-bottom {
   0% {
     transform: scale(0.25);
