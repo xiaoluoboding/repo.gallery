@@ -23,24 +23,13 @@ const SiteHeader = () => {
               </div>
             </div>
             <div className="flex items-center">
-              <h1 className="text-primary text-sm sm:text-xl">Repo Gallery</h1>
+              <h1 className="text-primary text-base sm:text-xl">
+                Repo Gallery
+              </h1>
             </div>
           </a>
         </div>
         <div className="flex items-center gap-4">
-          {/* <nav className="items-center space-x-2 text-sm font-medium hidden xl:flex">
-            <XButton variant="link">
-              <Link href={"https://github.com/dashboard-feed"} target="_blank">
-                Dashboard Feed
-              </Link>
-            </XButton>
-            <XButton variant="link" onClick={() => {}}>
-              <Link href="/repos">Repos</Link>
-            </XButton>
-            <XButton variant="link" onClick={() => {}}>
-              <Link href="/topics">Topics</Link>
-            </XButton>
-          </nav> */}
           <div className="flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end">
             <DarkmodeToggle />
             <XButton size="sm" variant="outline">

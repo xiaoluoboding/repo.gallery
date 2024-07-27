@@ -92,7 +92,7 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
             /> */}
             <div className="py-32 px-8 max-w-screen-lg flex w-full mx-auto justify-center">
               <div className="grid grid-cols-12 gap-8 items-start">
-                <div className="col-span-8 bg-neutral-50 dark:bg-neutral-900 p-8 border border-border rounded-lg">
+                <div className="col-span-12 sm:col-span-8 bg-neutral-50 dark:bg-neutral-900 p-8 border border-border rounded-lg">
                   <Suspense fallback={<LoadingSpinner />}>
                     <div
                       className={cn(
@@ -163,7 +163,7 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
                     </XTabs>
                   </Suspense>
                 </div>
-                <aside className="col-span-4 space-y-4">
+                <aside className="col-span-12 sm:col-span-4 space-y-4">
                   <fieldset className="bg-neutral-50 dark:bg-neutral-900 border border-border rounded-lg p-4">
                     <figcaption className="text-foreground font-semibold">
                       Repository Details

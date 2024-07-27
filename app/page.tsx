@@ -104,6 +104,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false)
 
   const repoStore = useRepoStore()
+  const repoList = useRepoStore((state) => state.repoList)
   const [currentRepoList, setCurrentRepoList] = useState<Repo[]>([])
   const [originalRepoList, setOriginalRepoList] = useState<Repo[]>([])
 
@@ -122,6 +123,15 @@ export default function Home() {
   const handleOpenRepo = (repo: Repo) => {
     router.push(`/repos/${encodeURIComponent(repo.slug)}`)
   }
+
+  useEffect(() => {
+    if (repoStore.isReRender) {
+      repoStore.setRepoState({
+        isReRender: false,
+      })
+      handleInitialData()
+    }
+  }, [repoStore.isReRender])
 
   useEffect(() => {
     setIsClient(true)
