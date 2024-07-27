@@ -14,7 +14,6 @@ import { Repo, Collection } from "@/lib/types"
 import { useRepoStore } from "@/store/repo"
 
 import { cn } from "@/lib/utils"
-import { buttonLinkVariants } from "@/components/ui/XButtonLink"
 import {
   XTabs,
   XTabsContent,
@@ -27,6 +26,9 @@ import { FloatingHeader } from "@/components/FloadingHeader"
 import SiteHeader from "@/components/SiteHeader"
 import { buttonVariants, XButton } from "@/components/ui/XButton"
 import { GitHubLogoIcon } from "@radix-ui/react-icons"
+import LibHuntIcon from "@/assets/images/libhunt.png"
+import OpenSauced from "@/components/icons/OpenSauced"
+import SourceGraph from "@/components/icons/SourceGraph"
 
 // export async function generateStaticParams() {
 //   return collectionList.map((collection: Collection) => ({
@@ -161,8 +163,8 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
                     </XTabs>
                   </Suspense>
                 </div>
-                <aside className="col-span-4 p-4 bg-neutral-50 dark:bg-neutral-900 border border-border rounded-lg">
-                  <fieldset>
+                <aside className="col-span-4 space-y-4">
+                  <fieldset className="bg-neutral-50 dark:bg-neutral-900 border border-border rounded-lg p-4">
                     <figcaption className="text-foreground font-semibold">
                       Repository Details
                     </figcaption>
@@ -203,55 +205,132 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
                       </div>
                     </figure>
                   </fieldset>
-                  <fieldset>
+                  <fieldset className="bg-neutral-50 dark:bg-neutral-900 border border-border rounded-lg p-4">
                     <figcaption className="text-foreground font-semibold">
                       Related topics
                     </figcaption>
-                    <figure>
-                      <div className="flex gap-x-4 gap-y-3 flex-col items-start w-full mt-4">
-                        <div className="flex gap-x-3 gap-y-2 flex-row flex-wrap items-center">
-                          {currentRepo.topics?.map((topic) => (
-                            <a
-                              className="flex items-center gap-0.5 text-muted-foreground text-sm hover:text-foreground"
-                              data-discover="true"
-                              key={topic}
-                              href={`/topics/${topic}`}
-                            >
-                              <HashIcon className="h-3 w-3" />
-                              {topic}
-                            </a>
-                          ))}
-                        </div>
+                    <figure className="flex gap-x-4 gap-y-3 flex-col items-start w-full mt-4">
+                      <div className="flex gap-x-3 gap-y-2 flex-row flex-wrap items-center">
+                        {currentRepo.topics?.map((topic) => (
+                          <a
+                            className="flex items-center gap-0.5 text-muted-foreground text-sm hover:text-foreground"
+                            data-discover="true"
+                            key={topic}
+                            href={`/topics/${topic}`}
+                          >
+                            <HashIcon className="h-3 w-3" />
+                            {topic}
+                          </a>
+                        ))}
                       </div>
                     </figure>
                   </fieldset>
-                  <div className="flex items-center justify-between gap-2 mt-4">
-                    <a
-                      href={currentRepo.link}
-                      target="_blank"
-                      className={buttonVariants({
-                        variant: "secondary",
-                        className: "gap-2",
-                        size: "sm",
-                      })}
-                    >
-                      <GitHubLogoIcon className="h-4 w-4" />
-                      <span className="text-sm">View on GitHub</span>
-                    </a>
-                    {currentRepo.homepage && (
+                  <fieldset className="bg-neutral-50 dark:bg-neutral-900 border border-border rounded-lg p-4">
+                    <figcaption className="text-foreground font-semibold">
+                      Repository Transformer
+                    </figcaption>
+                    <figure className="flex flex-col gap-2 items-center mt-4">
+                      {currentRepo.homepage && (
+                        <a
+                          href={currentRepo.homepage}
+                          target="_blank"
+                          className={buttonVariants({
+                            className: "gap-2 w-full flex !justify-between",
+                            size: "sm",
+                          })}
+                        >
+                          <span className="text-sm">Visit Website</span>
+                          <Link2Icon className="h-4 w-4" />
+                        </a>
+                      )}
                       <a
-                        href={currentRepo.homepage}
+                        href={currentRepo.link}
                         target="_blank"
                         className={buttonVariants({
-                          className: "gap-2",
+                          variant: "secondary",
+                          className: "gap-2 w-full flex !justify-between",
                           size: "sm",
                         })}
                       >
-                        <Link2Icon className="h-4 w-4" />
-                        <span className="text-sm">Website</span>
+                        <span className="text-sm">View on GitHub</span>
+                        <GitHubLogoIcon className="h-4 w-4" />
                       </a>
-                    )}
-                  </div>
+                      <a
+                        href={`https://app.opensauced.pizza/s/${currentRepo.slug}?hideBots=false`}
+                        target="_blank"
+                        className={buttonVariants({
+                          variant: "secondary",
+                          className: "gap-2 w-full flex !justify-between",
+                          size: "sm",
+                        })}
+                      >
+                        <span className="text-sm">View on OpenSauced</span>
+                        <OpenSauced className="h-4 w-4" />
+                      </a>
+                      <a
+                        href={`https://sourcegraph.com/github.com/${currentRepo.slug}`}
+                        target="_blank"
+                        className={buttonVariants({
+                          variant: "secondary",
+                          className: "gap-2 w-full flex !justify-between",
+                          size: "sm",
+                        })}
+                      >
+                        <span className="text-sm">View on Sourcegraph</span>
+                        <SourceGraph className="h-4 w-4" />
+                      </a>
+                      <a
+                        href={`https://star-history.com/#${currentRepo.slug}&Date`}
+                        target="_blank"
+                        className={buttonVariants({
+                          variant: "secondary",
+                          className: "gap-2 w-full flex !justify-between",
+                          size: "sm",
+                        })}
+                      >
+                        <span className="text-sm">View on Star History</span>
+                        <img
+                          src={`https://star-history.com/assets/icon.png`}
+                          className="w-4 h-4 border-none bg-transparent"
+                          alt="Star History Icon"
+                        />
+                      </a>
+                      <a
+                        href={`https://www.bookmark.style/?url=${encodeURIComponent(
+                          currentRepo.link
+                        )}`}
+                        target="_blank"
+                        className={buttonVariants({
+                          variant: "secondary",
+                          className: "gap-2 w-full flex !justify-between",
+                          size: "sm",
+                        })}
+                      >
+                        <span className="text-sm">View on Bookmark Style</span>
+                        <img
+                          src={`https://www.bookmark.style/favicon.png`}
+                          className="w-4 h-4 border-none bg-transparent"
+                          alt="Bookmark Style Icon"
+                        />
+                      </a>
+                      <a
+                        href={`https://www.libhunt.com/r/${currentRepo.title}`}
+                        target="_blank"
+                        className={buttonVariants({
+                          variant: "secondary",
+                          className: "gap-2 w-full flex !justify-between",
+                          size: "sm",
+                        })}
+                      >
+                        <span className="text-sm">View on LibHunt</span>
+                        <img
+                          src={LibHuntIcon.src}
+                          className="w-4 h-4 border-none rounded-none bg-transparent"
+                          alt="Star History Icon"
+                        />
+                      </a>
+                    </figure>
+                  </fieldset>
                 </aside>
               </div>
             </div>
