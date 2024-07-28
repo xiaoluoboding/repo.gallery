@@ -1,6 +1,6 @@
 export const sharedTitle = "Repo Gallery"
 export const sharedDescription =
-  "A curated selection of various handpicked repos by Robert Shaw"
+  "Discover the Original Information of Open Source Repositories"
 export const sharedImage = {
   width: 1200,
   height: 630,

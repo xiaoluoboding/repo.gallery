@@ -5,10 +5,10 @@ export async function GET() {
   const bookmarkList = await fetchRepoList()
 
   const date = new Date()
-  const siteURL = "https://robertshaw.id"
+  const siteURL = "https://repo.gallery"
   const author = {
     name: "Robert Shaw",
-    link: "https://robertshaw.id",
+    link: "https://repo.gallery",
   }
 
   const feed = new Feed({

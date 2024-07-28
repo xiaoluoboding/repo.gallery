@@ -45,7 +45,8 @@ export const OpenGraphImage = ({
           borderRadius: 9999,
         }}
       >
-        {`robertshaw.id${url !== "" ? `/${url}` : ""}`}
+        {/* {`repo.gallery${url !== "" ? `/${url}` : ""}`} */}
+        {url !== "" ? `${url}` : "repo.gallery"}
       </div>
       <span
         style={{

@@ -19,7 +19,7 @@ export default async function OGImage() {
   ])
   const title = "Repos"
   const description =
-    "A curated selection of various handpicked repos by Robert Shaw"
+    "A curated selection of various handpicked repos by Repo Gallery"
 
   return new ImageResponse(
     (
