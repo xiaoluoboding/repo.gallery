@@ -15,6 +15,7 @@ import {
   UsersIcon,
   SquarePenIcon,
   XIcon,
+  LightbulbIcon,
 } from "lucide-react"
 import Image from "next/image"
 
@@ -50,6 +51,7 @@ import {
   XDrawerPortal,
 } from "@/components/ui/XDrawer"
 import { UpdateBookmarkForm } from "../modules/UpdateBookmarkForm"
+import { XAlert, XAlertDescription, XAlertTitle } from "@/components/ui/XAlert"
 
 // export async function generateStaticParams() {
 //   return collectionList.map((collection: Collection) => ({
@@ -132,7 +134,7 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
             /> */}
             <div className="py-32 px-8 max-w-screen-lg flex w-full mx-auto justify-center">
               <div className="grid grid-cols-12 gap-8 items-start">
-                <div className="col-span-12 sm:col-span-8 bg-neutral-50 dark:bg-neutral-900 p-8 border border-border rounded-lg">
+                <main className="col-span-12 sm:col-span-8 bg-neutral-50 dark:bg-neutral-900 p-8 border border-border rounded-lg">
                   <Suspense fallback={<LoadingSpinner />}>
                     <div
                       className={cn(
@@ -160,7 +162,7 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
                             {currentRepo.title}
                           </h1>
                         </div>
-                        <p className="mt-2 text-gray-500">
+                        <p className="mt-2 line-clamp-2 text-gray-500">
                           {currentRepo.description}
                         </p>
                       </div>
@@ -232,6 +234,14 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
                             </div>
                           }
                         >
+                          <XAlert>
+                            <LightbulbIcon className="h-4 w-4" />
+                            <XAlertTitle>Tips!</XAlertTitle>
+                            <XAlertDescription>
+                              This is an AI-generated overview for reference
+                              only.
+                            </XAlertDescription>
+                          </XAlert>
                           <MarkdownRenderer>
                             {
                               (currentRepo.overview ||
@@ -266,7 +276,7 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
                       </XTabsContent>
                     </XTabs>
                   </Suspense>
-                </div>
+                </main>
                 <aside className="col-span-12 sm:col-span-4 space-y-4">
                   <fieldset className="bg-neutral-50 dark:bg-neutral-900 border border-border rounded-lg p-4">
                     <figcaption className="text-foreground font-semibold">
