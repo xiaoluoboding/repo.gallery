@@ -49,6 +49,8 @@ interface UpdateFormProps {
 
 export function UpdateBookmarkForm({ repo, setDialogOpen }: UpdateFormProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const [waitingText, setWaitingText] = useState("Submit")
+
   const repoStore = useRepoStore()
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -114,11 +116,28 @@ export function UpdateBookmarkForm({ repo, setDialogOpen }: UpdateFormProps) {
     }
   }
 
+  const handleScrapeUrl = async (link: string) => {
+    if (!link) return
+    const res = await fetch(`/api/scrape/${encodeURIComponent(link)}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    const data = (await res.json()) as string
+    return data
+  }
+
   async function handleUpdateBookmarkByLink(link: string) {
     setIsLoading(true)
+    setWaitingText("Fetching Metadata...")
     const metadata = await handleFetchBookmarkMetadata(link)
+    setWaitingText("Fetching GitHub Repo...")
     const repodata = await getRepo(link)
     const languageColor = await getRepoLanguageColor(repodata.language)
+    setWaitingText("Scraping Website...")
+    const overview = await handleScrapeUrl(repodata.homepage || link)
+    setWaitingText("Submitting...")
     const repoRecord = {
       ...repo,
       ...metadata,
@@ -126,6 +145,7 @@ export function UpdateBookmarkForm({ repo, setDialogOpen }: UpdateFormProps) {
       original_image: metadata.originalOGImage,
       language: repodata.language === null ? "Markdown" : repodata.language,
       language_color: languageColor,
+      overview,
     }
 
     const pickedRepoRecord = {
@@ -288,7 +308,7 @@ export function UpdateBookmarkForm({ repo, setDialogOpen }: UpdateFormProps) {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.15 }}
             >
-              {isLoading ? "Submitting..." : "Submit"}
+              {waitingText}
             </motion.span>
           </AnimatePresence>
         </XButton>

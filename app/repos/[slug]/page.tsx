@@ -13,6 +13,8 @@ import {
   SparklesIcon,
   StarIcon,
   UsersIcon,
+  SquarePenIcon,
+  XIcon,
 } from "lucide-react"
 import Image from "next/image"
 
@@ -21,7 +23,7 @@ import { XScrollArea } from "@/components/ui/XScrollArea"
 import { Repo, Collection } from "@/lib/types"
 import { useRepoStore } from "@/store/repo"
 
-import { cn } from "@/lib/utils"
+import { cn, isProd } from "@/lib/utils"
 import {
   XTabs,
   XTabsContent,
@@ -40,6 +42,14 @@ import SourceGraph from "@/components/icons/SourceGraph"
 import SiteFooter from "@/components/SiteFooter"
 import { XSkeleton, XSkeletonWithLoading } from "@/components/ui/XSkeleton"
 import { MarkdownRenderer } from "@/components/MarkdownRenderer"
+import {
+  XDrawer,
+  XDrawerContent,
+  XDrawerHeader,
+  XDrawerOverlay,
+  XDrawerPortal,
+} from "@/components/ui/XDrawer"
+import { UpdateBookmarkForm } from "../modules/UpdateBookmarkForm"
 
 // export async function generateStaticParams() {
 //   return collectionList.map((collection: Collection) => ({
@@ -52,6 +62,9 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
   const { theme } = useTheme()
 
   const [isClient, setIsClient] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [openUpdateDrawer, setOpenUpdateDrawer] = useState(false)
+  const [selectedRepo, setSelectedRepo] = useState<Repo>({} as Repo)
   const [isScraping, setIsScraping] = useState(false)
   const [currentTab, setCurrentTab] = useState("overview")
   const repoStore = useRepoStore()
@@ -62,6 +75,34 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
     const repo = repoList.find((repo) => repo.slug === decodeURIComponent(slug))
     setCurrentRepo(repo || ({} as Repo))
   }, [slug, repoStore.isSearching])
+
+  const handleDeleteCard = async (id: string) => {
+    setIsLoading(true)
+    try {
+      const res = await fetch(`/api/sdb/repos/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      if (res) {
+        toast.success("Bookmark deleted successfully")
+        setIsLoading(false)
+        handleInitialData()
+      }
+    } catch (error) {
+      setIsLoading(false)
+    } finally {
+      repoStore.setRepoState({
+        isReRender: true,
+      })
+    }
+  }
+
+  const handleOpenDrawer = (repo: Repo) => {
+    setSelectedRepo(repo)
+    setOpenUpdateDrawer(true)
+  }
 
   useEffect(() => {
     handleInitialData()
@@ -123,6 +164,34 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
                           {currentRepo.description}
                         </p>
                       </div>
+                      {!isProd && (
+                        <div className="absolute top-4 right-0 flex items-center gap-2">
+                          <XButton
+                            disabled={isLoading}
+                            variant={"outline"}
+                            size="icon"
+                            onClick={(e) => {
+                              e.preventDefault()
+                              e.stopPropagation()
+                              handleOpenDrawer(currentRepo)
+                            }}
+                          >
+                            <SquarePenIcon className="w-4 h-4" />
+                          </XButton>
+                          <XButton
+                            disabled={isLoading}
+                            variant={"outline"}
+                            size="icon"
+                            onClick={(e) => {
+                              e.preventDefault()
+                              e.stopPropagation()
+                              handleDeleteCard(currentRepo.id)
+                            }}
+                          >
+                            <XIcon className="w-4 h-4" />
+                          </XButton>
+                        </div>
+                      )}
                     </div>
 
                     <XTabs
@@ -380,6 +449,31 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
 
             {/* <!-- Footer --> */}
             <SiteFooter />
+
+            <XDrawer
+              shouldScaleBackground={false}
+              open={openUpdateDrawer}
+              onOpenChange={setOpenUpdateDrawer}
+              direction="right"
+            >
+              <XDrawerPortal>
+                <XDrawerOverlay className="fixed inset-0 bg-black/40" />
+                <XDrawerContent className="fixed bottom-0 right-0 flex h-full w-2/5 flex-col rounded-l-lg bg-background border-border">
+                  <div className="flex-1 overflow-y-auto rounded-l-lg bg-background">
+                    <XDrawerHeader className="font-semibold text-xl text-accent-foreground">
+                      Update Repo
+                    </XDrawerHeader>
+
+                    <div className="p-4 gap-4">
+                      <UpdateBookmarkForm
+                        setDialogOpen={setOpenUpdateDrawer}
+                        repo={selectedRepo}
+                      />
+                    </div>
+                  </div>
+                </XDrawerContent>
+              </XDrawerPortal>
+            </XDrawer>
           </XScrollArea>
         </>
       )}
