@@ -25,7 +25,7 @@ export const SubmitBookmarkDialog = ({ currentRepo }: IProps) => {
   return (
     <XDialog open={open} onOpenChange={setOpen}>
       <XDialogTrigger asChild>
-        <XButton size="sm" className="relative">
+        <XButton size="sm" className="relative hidden sm:flex">
           <SendIcon size={16} className="mr-2" />
           Submit
           <span className="absolute -right-1 -top-1 flex h-2.5 w-2.5">
@@ -37,11 +37,7 @@ export const SubmitBookmarkDialog = ({ currentRepo }: IProps) => {
       <XDialogContent className="border-border">
         <XDialogHeader>
           <XDialogTitle>Submit a repo</XDialogTitle>
-          <XDialogDescription>
-            Send me a website you like and if I like it too, you&apos;ll see it
-            in the repos list. With respect, please do not submit more than 5
-            websites a day.
-          </XDialogDescription>
+          <XDialogDescription>It must be a valid repo.</XDialogDescription>
         </XDialogHeader>
         <InsertBookmarkForm setDialogOpen={setOpen} currentRepo={currentRepo} />
       </XDialogContent>

@@ -6,6 +6,7 @@ import { XButton } from "@/components/ui/XButton"
 import { DarkmodeToggle } from "@/components/DarkmodeToggle"
 import { SubmitBookmarkDialog } from "./dialog/SubmitBookmarkDialog"
 import { useRepoStore } from "@/store/repo"
+import { isProd } from "@/lib/utils"
 
 const SiteHeader = () => {
   const repoStore = useRepoStore()
@@ -23,9 +24,7 @@ const SiteHeader = () => {
               </div>
             </div>
             <div className="flex items-center">
-              <h1 className="text-primary text-base sm:text-xl">
-                Repo Gallery
-              </h1>
+              <h1 className="text-primary text-sm sm:text-xl">Repo Gallery</h1>
             </div>
           </a>
         </div>
@@ -36,7 +35,9 @@ const SiteHeader = () => {
               <StarIcon className="h-4 w-4 mr-1" />
               Star
             </XButton>
-            <SubmitBookmarkDialog currentRepo={repoStore.repoList[0]} />
+            {!isProd && (
+              <SubmitBookmarkDialog currentRepo={repoStore.repoList[0]} />
+            )}
           </div>
         </div>
       </div>

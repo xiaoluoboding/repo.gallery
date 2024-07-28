@@ -134,6 +134,7 @@ export function UpdateBookmarkForm({ repo, setDialogOpen }: UpdateFormProps) {
         "slug",
         "homepage",
         "description",
+        "overview",
         "image",
         "original_image",
         "logo",

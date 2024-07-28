@@ -11,6 +11,7 @@ export interface Repo {
   slug: string
   homepage?: string
   description?: string
+  overview?: string
   image: string
   original_image: string | null
   logo: string | null

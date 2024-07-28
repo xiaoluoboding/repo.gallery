@@ -24,8 +24,7 @@ export const useRepoStore = create<RepoState>()(
         repoList: [],
         collectionList: [],
         getState: () => get(),
-        setRepoList: (repoList: Repo[]) =>
-          set((state) => ({ repoList })),
+        setRepoList: (repoList: Repo[]) => set((state) => ({ repoList })),
         setCollectionList: (collectionList: Collection[]) =>
           set((state) => ({ collectionList })),
         setRepoState: (state: Partial<RepoState>) => set(state),

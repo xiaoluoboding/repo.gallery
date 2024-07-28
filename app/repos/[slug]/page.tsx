@@ -4,9 +4,18 @@
 
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react"
 import { toast } from "sonner"
-import { motion, useMotionTemplate, useMotionValue } from "framer-motion"
-import { Star, Globe, HashIcon, GitForkIcon, Link2Icon } from "lucide-react"
+import {
+  Star,
+  Globe,
+  HashIcon,
+  GitForkIcon,
+  Link2Icon,
+  SparklesIcon,
+  StarIcon,
+  UsersIcon,
+} from "lucide-react"
 import Image from "next/image"
+import Markdown from "react-markdown"
 
 import { LoadingSpinner } from "@/components/LoadingSpinner"
 import { XScrollArea } from "@/components/ui/XScrollArea"
@@ -30,6 +39,7 @@ import LibHuntIcon from "@/assets/images/libhunt.png"
 import OpenSauced from "@/components/icons/OpenSauced"
 import SourceGraph from "@/components/icons/SourceGraph"
 import SiteFooter from "@/components/SiteFooter"
+import { XSkeleton, XSkeletonWithLoading } from "@/components/ui/XSkeleton"
 
 // export async function generateStaticParams() {
 //   return collectionList.map((collection: Collection) => ({
@@ -41,21 +51,12 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
   const { slug } = params
   const { theme } = useTheme()
 
-  let mouseX = useMotionValue(0)
-  let mouseY = useMotionValue(0)
-
   const [isClient, setIsClient] = useState(false)
+  const [isScraping, setIsScraping] = useState(false)
+  const [currentTab, setCurrentTab] = useState("overview")
   const repoStore = useRepoStore()
   const repoList = useRepoStore((state) => state.repoList)
   const [currentRepo, setCurrentRepo] = useState<Repo>({} as Repo)
-
-  function onMouseMove({ currentTarget, clientX, clientY }: any) {
-    let { left, top } = currentTarget.getBoundingClientRect()
-    mouseX.set(clientX - left - 80)
-    mouseY.set(clientY - top - 80)
-  }
-
-  const motionStyle = useMotionTemplate`translate3d(${mouseX}px, ${mouseY}px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg)`
 
   const handleInitialData = useCallback(async () => {
     const repo = repoList.find((repo) => repo.slug === decodeURIComponent(slug))
@@ -124,16 +125,49 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
                       </div>
                     </div>
 
-                    <XTabs defaultValue="star-history" className="w-full">
+                    <XTabs
+                      defaultValue="overview"
+                      className="w-full"
+                      value={currentTab}
+                      onValueChange={setCurrentTab}
+                    >
                       <XTabsList>
-                        <XTabsTrigger value="Overview">Overview</XTabsTrigger>
+                        <XTabsTrigger value="overview">
+                          <div className="flex gap-2 items-center">
+                            <SparklesIcon className="w-4 h-4" />
+                            <span>Overview</span>
+                          </div>
+                        </XTabsTrigger>
                         <XTabsTrigger value="star-history">
-                          Star History
+                          <div className="flex gap-2 items-center">
+                            <StarIcon className="w-4 h-4" />
+                            <span>Star History</span>
+                          </div>
                         </XTabsTrigger>
                         <XTabsTrigger value="contributors">
-                          Contributors
+                          <div className="flex gap-2 items-center">
+                            <UsersIcon className="w-4 h-4" />
+                            <span>Contributors</span>
+                          </div>
                         </XTabsTrigger>
                       </XTabsList>
+                      <XTabsContent value="overview">
+                        <XSkeletonWithLoading
+                          loading={isScraping}
+                          fallback={
+                            <div className="space-y-4">
+                              <XSkeleton className="w-full h-6"></XSkeleton>
+                              <XSkeleton className="w-2/3 h-4"></XSkeleton>
+                              <XSkeleton className="w-2/3 h-4"></XSkeleton>
+                              <XSkeleton className="w-1/3 h-4"></XSkeleton>
+                            </div>
+                          }
+                        >
+                          <Markdown className={"prose dark:prose-invert mt-4"}>
+                            {currentRepo.overview || currentRepo.description}
+                          </Markdown>
+                        </XSkeletonWithLoading>
+                      </XTabsContent>
                       <XTabsContent value="star-history">
                         <a href={currentRepo.link} target="_blank">
                           <img

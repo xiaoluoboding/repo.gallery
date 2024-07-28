@@ -90,17 +90,31 @@ export function InsertBookmarkForm({
     }
   }
 
+  const handleScrapeUrl = async (link: string) => {
+    if (!link) return
+    const res = await fetch(`/api/scrape/${encodeURIComponent(link)}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    const data = (await res.json()) as string
+    return data
+  }
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
     const metadata = await handleFetchBookmarkMetadata(values.link)
     const repodata = await getRepo(values.link)
     const languageColor = await getRepoLanguageColor(repodata.language)
+    const overview = await handleScrapeUrl(repodata.homepage || values.link)
     const repoRecord = {
       ...metadata,
       ...repodata,
       original_image: metadata.originalOGImage,
       language: repodata.language === null ? "Markdown" : repodata.language,
       language_color: languageColor,
+      overview,
     }
     try {
       await handleInsertRepo(repoRecord)
@@ -123,6 +137,7 @@ export function InsertBookmarkForm({
         "slug",
         "homepage",
         "description",
+        "overview",
         "image",
         "original_image",
         "logo",
