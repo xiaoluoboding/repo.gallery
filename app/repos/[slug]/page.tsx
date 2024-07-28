@@ -163,10 +163,11 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
                             </div>
                           }
                         >
-                          <MarkdownRenderer
-                            className={"prose dark:prose-invert mt-4"}
-                          >
-                            {currentRepo.overview || currentRepo.description}
+                          <MarkdownRenderer>
+                            {
+                              (currentRepo.overview ||
+                                currentRepo.description) as string
+                            }
                           </MarkdownRenderer>
                         </XSkeletonWithLoading>
                       </XTabsContent>
