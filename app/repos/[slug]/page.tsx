@@ -15,7 +15,6 @@ import {
   UsersIcon,
 } from "lucide-react"
 import Image from "next/image"
-import Markdown from "react-markdown"
 
 import { LoadingSpinner } from "@/components/LoadingSpinner"
 import { XScrollArea } from "@/components/ui/XScrollArea"
@@ -40,6 +39,7 @@ import OpenSauced from "@/components/icons/OpenSauced"
 import SourceGraph from "@/components/icons/SourceGraph"
 import SiteFooter from "@/components/SiteFooter"
 import { XSkeleton, XSkeletonWithLoading } from "@/components/ui/XSkeleton"
+import { MarkdownRenderer } from "@/components/MarkdownRenderer"
 
 // export async function generateStaticParams() {
 //   return collectionList.map((collection: Collection) => ({
@@ -163,9 +163,11 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
                             </div>
                           }
                         >
-                          <Markdown className={"prose dark:prose-invert mt-4"}>
+                          <MarkdownRenderer
+                            className={"prose dark:prose-invert mt-4"}
+                          >
                             {currentRepo.overview || currentRepo.description}
-                          </Markdown>
+                          </MarkdownRenderer>
                         </XSkeletonWithLoading>
                       </XTabsContent>
                       <XTabsContent value="star-history">

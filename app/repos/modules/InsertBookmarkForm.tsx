@@ -55,6 +55,7 @@ export function InsertBookmarkForm({
   currentRepo,
 }: IProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const [waitingText, setWaitingText] = useState("Submit")
   const repoStore = useRepoStore()
   const collectionList = useRepoStore((state) =>
     state.collectionList.filter((c) => c.title)
@@ -104,10 +105,15 @@ export function InsertBookmarkForm({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
+
+    setWaitingText("Fetching Metadata...")
     const metadata = await handleFetchBookmarkMetadata(values.link)
+    setWaitingText("Fetching GitHub Repo...")
     const repodata = await getRepo(values.link)
     const languageColor = await getRepoLanguageColor(repodata.language)
+    setWaitingText("Scraping Website...")
     const overview = await handleScrapeUrl(repodata.homepage || values.link)
+    setWaitingText("Submitting...")
     const repoRecord = {
       ...metadata,
       ...repodata,
@@ -126,6 +132,7 @@ export function InsertBookmarkForm({
       toast.error(error.message)
     } finally {
       setIsLoading(false)
+      setWaitingText("Submit")
       setDialogOpen(false)
     }
   }
@@ -245,7 +252,7 @@ export function InsertBookmarkForm({
         />
         <XButton type="submit" className="w-full" disabled={isLoading}>
           {hasErrors ? (
-            "Submit"
+            waitingText
           ) : (
             <AnimatePresence mode="wait" initial={false}>
               <motion.span
@@ -255,7 +262,7 @@ export function InsertBookmarkForm({
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.15 }}
               >
-                {isLoading ? "Submitting..." : "Submit"}
+                {waitingText}
               </motion.span>
             </AnimatePresence>
           )}
