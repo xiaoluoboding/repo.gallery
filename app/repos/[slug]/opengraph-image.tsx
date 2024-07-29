@@ -2,8 +2,7 @@ import { ImageResponse } from "next/og"
 
 import { OpenGraphImage } from "@/components/OGImage"
 import { getMediumFont, getBoldFont } from "@/lib/fonts"
-import { sharedImage } from "@/app/shared-metadata"
-import { useRepoStore } from "@/store/repo"
+import { sharedImage, sharedDescription } from "@/app/shared-metadata"
 
 export const runtime = "edge"
 export const alt = "Bookmarks"
@@ -24,13 +23,8 @@ export default async function OGImage({
     getBoldFont(),
   ])
 
-  const currentRepo = useRepoStore((state) => {
-    const idx = state.repoList.findIndex((repo) => repo.slug === slug)
-    return idx !== -1 ? state.repoList[idx] : null
-  })
-
-  const title = currentRepo?.title || "Repo Gallery"
-  const description = currentRepo?.description || "Repo Gallery"
+  const title = decodeURIComponent(slug).split("/").pop() ?? ""
+  const description = sharedDescription
 
   return new ImageResponse(
     (
@@ -45,14 +39,14 @@ export default async function OGImage({
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           >
-            <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
+            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" />
           </svg>
         }
-        url={`${slug}`}
+        url={decodeURIComponent(slug)}
       />
     ),
     {

@@ -52,7 +52,7 @@ export const OpenGraphImage = ({
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "0.5rem",
+          gap: "1rem",
           position: "absolute",
           bottom: 100,
           left: 60,
