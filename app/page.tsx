@@ -164,7 +164,7 @@ export default function Home() {
             <section className="container py-24 sm:pt-64 text-primary max-w-screen-md">
               <div className="flex justify-center flex-col sm:text-center">
                 <h1 className="text-3xl lg:text-5xl text-neon-neutral">
-                  Discover the Original Information of Open Source Repositories
+                  Explore the Variety of Information in Open Source Repositories
                 </h1>
                 <br />
                 <p className="my-0">
