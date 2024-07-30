@@ -9,7 +9,7 @@ import { ChangeEvent, useState } from "react"
 import { nanoid } from "nanoid"
 import { MinusIcon, PlusIcon } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
-import { pick } from "lodash-es"
+import { pick, isEmpty } from "lodash-es"
 
 import {
   XForm,
@@ -135,19 +135,21 @@ export function UpdateBookmarkForm({ repo, setDialogOpen }: UpdateFormProps) {
     setWaitingText("Fetching GitHub Repo...")
     const repodata = await getRepo(link)
     const languageColor = await getRepoLanguageColor(repodata.language)
-    setWaitingText("Scraping Website...")
-    const overview = await handleScrapeUrl(repodata.homepage || link)
+    let overview = repo.overview
+    if (isEmpty(repo.overview)) {
+      setWaitingText("Scraping Website...")
+      overview = await handleScrapeUrl(repodata.homepage || link)
+    }
     setWaitingText("Submitting...")
     const repoRecord = {
       ...repo,
       ...metadata,
       ...repodata,
-      original_image: metadata.originalOGImage,
+      original_image: metadata.originalOGImage ?? null,
       language: repodata.language === null ? "Markdown" : repodata.language,
       language_color: languageColor,
       overview,
     }
-
     const pickedRepoRecord = {
       ...pick(repoRecord, [
         "title",
@@ -178,8 +180,13 @@ export function UpdateBookmarkForm({ repo, setDialogOpen }: UpdateFormProps) {
       ]),
       link: form.getValues("link"),
       tags: form.getValues("tags"),
-      updated_at: dayjs().valueOf(),
+      updated_at: String(dayjs().valueOf()),
     }
+
+    repoStore.setCurrentRepo({
+      ...pickedRepoRecord,
+      id: repo.id,
+    })
 
     try {
       await fetch(`/api/sdb/repos/${repo.id}`, {

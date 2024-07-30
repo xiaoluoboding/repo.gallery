@@ -2,14 +2,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 
-import { Suspense, useCallback, useEffect, useMemo, useState } from "react"
+import { Suspense, useCallback, useEffect, useState } from "react"
 import { toast } from "sonner"
 import {
-  Star,
-  Globe,
-  HashIcon,
-  GitForkIcon,
-  Link2Icon,
   SparklesIcon,
   StarIcon,
   UsersIcon,
@@ -21,7 +16,7 @@ import Image from "next/image"
 
 import { LoadingSpinner } from "@/components/LoadingSpinner"
 import { XScrollArea } from "@/components/ui/XScrollArea"
-import { Repo, Collection } from "@/lib/types"
+import { Repo } from "@/lib/types"
 import { useRepoStore } from "@/store/repo"
 
 import { cn, isProd } from "@/lib/utils"
@@ -34,15 +29,12 @@ import {
 import { useTheme } from "next-themes"
 import FlipCard from "@/components/BookmarkCard/FlipCard"
 import { FloatingHeader } from "@/components/FloadingHeader"
+import { XButton } from "@/components/ui/XButton"
 import SiteHeader from "@/components/SiteHeader"
-import { buttonVariants, XButton } from "@/components/ui/XButton"
-import { GitHubLogoIcon } from "@radix-ui/react-icons"
-import LibHuntIcon from "@/assets/images/libhunt.png"
-import OpenSauced from "@/components/icons/OpenSauced"
-import SourceGraph from "@/components/icons/SourceGraph"
 import SiteFooter from "@/components/SiteFooter"
 import { XSkeleton, XSkeletonWithLoading } from "@/components/ui/XSkeleton"
 import { MarkdownRenderer } from "@/components/MarkdownRenderer"
+import { XAlert, XAlertDescription, XAlertTitle } from "@/components/ui/XAlert"
 import {
   XDrawer,
   XDrawerContent,
@@ -51,7 +43,7 @@ import {
   XDrawerPortal,
 } from "@/components/ui/XDrawer"
 import { UpdateBookmarkForm } from "../modules/UpdateBookmarkForm"
-import { XAlert, XAlertDescription, XAlertTitle } from "@/components/ui/XAlert"
+import AsidePanel from "./modules/AsidePanel"
 
 // export async function generateStaticParams() {
 //   return collectionList.map((collection: Collection) => ({
@@ -71,12 +63,12 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
   const [currentTab, setCurrentTab] = useState("overview")
   const repoStore = useRepoStore()
   const repoList = useRepoStore((state) => state.repoList)
-  const [currentRepo, setCurrentRepo] = useState<Repo>({} as Repo)
+  const currentRepo = useRepoStore((state) => state.currentRepo)
 
   const handleInitialData = useCallback(async () => {
     const repo = repoList.find((repo) => repo.slug === decodeURIComponent(slug))
-    setCurrentRepo(repo || ({} as Repo))
-  }, [slug, repoStore.isSearching])
+    repoStore.setCurrentRepo(repo || ({} as Repo))
+  }, [slug])
 
   const handleDeleteCard = async (id: string) => {
     setIsLoading(true)
@@ -107,8 +99,13 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
   }
 
   useEffect(() => {
-    handleInitialData()
-  }, [slug, repoStore.repoList, repoStore.isSearching])
+    handleInitialData().then(() => {
+      repoStore.setRepoState({
+        isReRender: false,
+      })
+    })
+  }, [slug])
+
   useEffect(() => {
     setIsClient(true)
     handleInitialData()
@@ -277,183 +274,7 @@ export default function RepoPage({ params }: { params: { slug: string } }) {
                     </XTabs>
                   </Suspense>
                 </main>
-                <aside className="col-span-12 sm:col-span-4 space-y-4">
-                  <fieldset className="bg-neutral-50 dark:bg-neutral-900 border border-border rounded-lg p-4">
-                    <figcaption className="text-foreground font-semibold">
-                      Repository Details
-                    </figcaption>
-                    <figure className="flex flex-col gap-2 items-center mt-4">
-                      <div className="w-full flex gap-2 items-center justify-between text-foreground">
-                        <span className="text-muted-foreground flex items-center gap-1 text-sm">
-                          <Star className="h-4 w-4" />
-                          <span className="">Stars</span>
-                        </span>
-                        <span className="text-sm">
-                          {currentRepo.stars.toLocaleString("en-US")}
-                        </span>
-                      </div>
-                      <div className="w-full flex gap-2 items-center justify-between text-foreground">
-                        <span className="text-muted-foreground flex items-center gap-1 text-sm">
-                          <GitForkIcon className="h-4 w-4" />
-                          <span className="">Forks</span>
-                        </span>
-                        <span className="text-sm">
-                          {currentRepo.forks.toLocaleString("en-US")}
-                        </span>
-                      </div>
-                      <div className="w-full flex gap-2 items-center justify-between text-foreground">
-                        <span className="text-muted-foreground flex items-center gap-1 text-sm">
-                          <span
-                            className={cn("h-4 w-4 p-[2px] rounded-full")}
-                            style={{
-                              backgroundColor: currentRepo.language_color,
-                            }}
-                          />
-                          <span className="">Written in </span>
-                        </span>
-                        <span className="text-sm">{currentRepo.language}</span>
-                      </div>
-                    </figure>
-                  </fieldset>
-                  <fieldset className="bg-neutral-50 dark:bg-neutral-900 border border-border rounded-lg p-4">
-                    <figcaption className="text-foreground font-semibold">
-                      Related topics
-                    </figcaption>
-                    <figure className="flex gap-x-4 gap-y-3 flex-col items-start w-full mt-4">
-                      <div className="flex gap-x-3 gap-y-2 flex-row flex-wrap items-center">
-                        {currentRepo.topics?.map((topic) => (
-                          <a
-                            className="flex items-center gap-0.5 text-muted-foreground text-sm hover:text-foreground"
-                            data-discover="true"
-                            key={topic}
-                            href={`/topics/${topic}`}
-                          >
-                            <HashIcon className="h-3 w-3" />
-                            {topic}
-                          </a>
-                        ))}
-                      </div>
-                    </figure>
-                  </fieldset>
-                  <fieldset className="bg-neutral-50 dark:bg-neutral-900 border border-border rounded-lg p-4">
-                    <figcaption className="text-foreground font-semibold">
-                      Repository Transformer
-                    </figcaption>
-                    <figure className="flex flex-col gap-2 items-center mt-4">
-                      {currentRepo.homepage && (
-                        <a
-                          href={currentRepo.homepage}
-                          target="_blank"
-                          className={buttonVariants({
-                            className: "gap-2 w-full flex !justify-between",
-                            size: "sm",
-                          })}
-                        >
-                          <span className="text-sm">Visit Website</span>
-                          <Link2Icon className="h-4 w-4" />
-                        </a>
-                      )}
-                      <a
-                        href={currentRepo.link}
-                        target="_blank"
-                        className={buttonVariants({
-                          variant: "secondary",
-                          className: "gap-2 w-full flex !justify-between",
-                          size: "sm",
-                        })}
-                      >
-                        <span className="text-sm">View on GitHub</span>
-                        <GitHubLogoIcon className="h-4 w-4" />
-                      </a>
-                      <a
-                        href={`https://github.dev/${currentRepo.slug}`}
-                        target="_blank"
-                        className={buttonVariants({
-                          variant: "secondary",
-                          className: "gap-2 w-full flex !justify-between",
-                          size: "sm",
-                        })}
-                      >
-                        <span className="text-sm">View on github.dev</span>
-                        <GitHubLogoIcon className="h-4 w-4" />
-                      </a>
-                      <a
-                        href={`https://app.opensauced.pizza/s/${currentRepo.slug}?hideBots=false`}
-                        target="_blank"
-                        className={buttonVariants({
-                          variant: "secondary",
-                          className: "gap-2 w-full flex !justify-between",
-                          size: "sm",
-                        })}
-                      >
-                        <span className="text-sm">View on OpenSauced</span>
-                        <OpenSauced className="h-4 w-4" />
-                      </a>
-                      <a
-                        href={`https://sourcegraph.com/github.com/${currentRepo.slug}`}
-                        target="_blank"
-                        className={buttonVariants({
-                          variant: "secondary",
-                          className: "gap-2 w-full flex !justify-between",
-                          size: "sm",
-                        })}
-                      >
-                        <span className="text-sm">View on Sourcegraph</span>
-                        <SourceGraph className="h-4 w-4" />
-                      </a>
-                      <a
-                        href={`https://star-history.com/#${currentRepo.slug}&Date`}
-                        target="_blank"
-                        className={buttonVariants({
-                          variant: "secondary",
-                          className: "gap-2 w-full flex !justify-between",
-                          size: "sm",
-                        })}
-                      >
-                        <span className="text-sm">View on Star History</span>
-                        <img
-                          src={`https://star-history.com/assets/icon.png`}
-                          className="w-4 h-4 border-none bg-transparent"
-                          alt="Star History Icon"
-                        />
-                      </a>
-                      <a
-                        href={`https://www.bookmark.style/?url=${encodeURIComponent(
-                          currentRepo.link
-                        )}`}
-                        target="_blank"
-                        className={buttonVariants({
-                          variant: "secondary",
-                          className: "gap-2 w-full flex !justify-between",
-                          size: "sm",
-                        })}
-                      >
-                        <span className="text-sm">View on Bookmark Style</span>
-                        <img
-                          src={`https://www.bookmark.style/favicon.png`}
-                          className="w-4 h-4 border-none bg-transparent"
-                          alt="Bookmark Style Icon"
-                        />
-                      </a>
-                      <a
-                        href={`https://www.libhunt.com/r/${currentRepo.title}`}
-                        target="_blank"
-                        className={buttonVariants({
-                          variant: "secondary",
-                          className: "gap-2 w-full flex !justify-between",
-                          size: "sm",
-                        })}
-                      >
-                        <span className="text-sm">View on LibHunt</span>
-                        <img
-                          src={LibHuntIcon.src}
-                          className="w-4 h-4 border-none rounded-none bg-transparent"
-                          alt="Star History Icon"
-                        />
-                      </a>
-                    </figure>
-                  </fieldset>
-                </aside>
+                <AsidePanel repo={currentRepo} />
               </div>
             </div>
 
