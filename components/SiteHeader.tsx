@@ -31,10 +31,15 @@ const SiteHeader = () => {
         <div className="flex items-center gap-4">
           <div className="flex flex-1 items-center justify-end gap-2 sm:gap-2 md:justify-end">
             <DarkmodeToggle />
-            <XButton size="sm" variant="outline">
-              <StarIcon className="h-4 w-4 mr-1" />
-              Star
-            </XButton>
+            <Link
+              href="https://github.com/xiaoluoboding/repo.gallery"
+              target="_blank"
+            >
+              <XButton size="sm" variant={"outline"}>
+                <StarIcon className="h-4 w-4 mr-1" />
+                Star
+              </XButton>
+            </Link>
             {!isProd && (
               <SubmitBookmarkDialog currentRepo={repoStore.repoList[0]} />
             )}
