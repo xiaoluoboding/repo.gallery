@@ -26,9 +26,9 @@ const AsidePanel = ({ repo }: { repo: Repo }) => {
     return item.id === repo.id
   })
   const prevLink =
-    idx !== -1 ? `/repos/${encodeURIComponent(repoList[idx - 1].slug)}` : null
+    idx !== -1 ? `/repos/${encodeURIComponent(repoList[idx - 1]?.slug)}` : null
   const nextLink =
-    idx !== -1 ? `/repos/${encodeURIComponent(repoList[idx + 1].slug)}` : null
+    idx !== -1 ? `/repos/${encodeURIComponent(repoList[idx + 1]?.slug)}` : null
 
   return (
     <aside className="col-span-12 sm:col-span-4 space-y-4">

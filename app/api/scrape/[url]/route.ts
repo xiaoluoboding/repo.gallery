@@ -53,17 +53,17 @@ Total output will be a summary of the website.
     const SUMMARY_PROMPT = PromptTemplate.fromTemplate(summaryTemplate)
 
     const summaryRefineTemplate = `
-    You are an expert in summarizing Website meta infomation.
-    Your goal is to create a summary of a website.
-    We have provided an existing summary up to a certain point: {existing_answer}
+You are an expert in summarizing Website meta infomation.
+Your goal is to create a summary of a website.
+We have provided an existing summary up to a certain point: {existing_answer}
 
-    Below you find the metadata of a website:
-    --------
-    {text}
-    --------
+Below you find the metadata of a website:
+--------
+{text}
+--------
 
-    Given the new context, refine the summary.
-    `
+Given the new context, refine the summary.
+`
 
     const SUMMARY_REFINE_PROMPT = PromptTemplate.fromTemplate(
       summaryRefineTemplate

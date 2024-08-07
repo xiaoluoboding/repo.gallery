@@ -26,6 +26,7 @@ import { XTextarea } from "@/components/ui/XTextarea"
 import { Bookmark, Repo } from "@/lib/types"
 import { useRepoStore } from "@/store/repo"
 import { getRepo, getRepoLanguageColor } from "@/lib/github"
+import { isProd } from "@/lib/utils"
 
 const formSchema = z.object({
   title: z.string().min(0, {
@@ -203,6 +204,17 @@ export function UpdateBookmarkForm({ repo, setDialogOpen }: UpdateFormProps) {
     }
   }
 
+  const onScraping = async () => {
+    const link = form.getValues("link")
+    setIsLoading(true)
+    if (!isEmpty(link)) {
+      setWaitingText("Scraping Website...")
+      const result = await handleScrapeUrl(link)
+      console.log(result)
+      setIsLoading(false)
+    }
+  }
+
   return (
     <XForm {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -319,6 +331,26 @@ export function UpdateBookmarkForm({ repo, setDialogOpen }: UpdateFormProps) {
             </motion.span>
           </AnimatePresence>
         </XButton>
+        {!isProd && (
+          <XButton
+            type="button"
+            className="w-full"
+            disabled={isLoading}
+            onClick={() => onScraping()}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={isLoading ? "scraping" : "scrape"}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.15 }}
+              >
+                {waitingText}
+              </motion.span>
+            </AnimatePresence>
+          </XButton>
+        )}
       </form>
     </XForm>
   )
